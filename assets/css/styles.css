@@ -1,0 +1,20 @@
+body {
+background-color: rgb(2,136,209);  
+}
+
+
+.jumbotron {
+  background: url(img1.jpg;
+}
+
+.jumbotron {
+}
+
+.navbar.navbar-light.navbar-expand-md {
+  margin-bottom: 0px;
+}
+
+.btn.btn-primary.border.rounded-0.border-white {
+  display: flex;
+  justify-content: center;
+}
