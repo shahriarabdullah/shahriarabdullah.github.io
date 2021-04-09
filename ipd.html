@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+
+<canvas id="canvas" width="660" height="510" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<canvas id="canMS" width="400" height="400" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<h3 id="phase"></h3>
+<h3 id="pfrac1"></h3>
+<h3 id="pfrac2"></h3>
+
+<script>
+
+var phases={
+    "153,217,234":"Liquid (Single Phase Zone)",
+    "255,201,14":"Alpha (Single Phase Zone)",
+    "255,127,39":"Beta (Single Phase Zone)",
+    "112,146,190":"Liq+Alpha (Two Phase Zone)",
+    "127,127,127":"Liq+Beta (Two Phase Zone)",
+    "237,28,36":"Alpha+Beta (Two Phase Zone)"
+};
+
+function getMousePos(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+      x: evt.clientX - rect.left,
+      y: evt.clientY - rect.top
+    };
+  }
+  var canvas = document.getElementById('canvas');
+  var ctx = canvas.getContext('2d');
+
+  canvas.addEventListener('click', function(evt) {
+    var mousePos = getMousePos(canvas, evt);
+    var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
+    //writeMessage(canvas, message);
+    var px=ctx.getImageData(mousePos.x,mousePos.y,1,1).data;
+    var rgb=[px[0],px[1],px[2]];
+    console.log("The pixel at "+ message + " is "+rgb);
+
+    var phase_key=px[0]+","+px[1]+","+px[2];
+    console.log("The zone is "+phases[phase_key]);
+    document.getElementById("phase").innerHTML = "Zone: "+phases[phase_key];
+
+    var nx=mousePos.x;
+    var ny=mousePos.y;
+
+    var x1=nx;
+
+
+    if(phase_key=="112,146,190" || phase_key=="127,127,127" || phase_key=="237,28,36"){
+      var cpk=phase_key;
+        while(phase_key==cpk){
+            px=ctx.getImageData(nx,ny,1,1).data;
+            phase_key=px[0]+","+px[1]+","+px[2];
+            rgb=[px[0],px[1],px[2]];
+            nx=nx+1;
+        }
+        var x2=nx;
+        var r_phase=x2-x1;
+        //console.log("r_phase is "+r_phase);
+
+        phase_key=cpk;
+        nx=x1;
+        
+        while(phase_key==cpk){
+            px=ctx.getImageData(nx,ny,1,1).data;
+            phase_key=px[0]+","+px[1]+","+px[2];
+            rgb=[px[0],px[1],px[2]];
+            nx=nx-1;
+        }
+        x2=nx;
+        
+        var l_phase=x1-x2;
+        //console.log("l_phase is "+l_phase);
+
+        var r_p=l_phase*100/(r_phase+l_phase);
+        var l_p=r_phase*100/(r_phase+l_phase);
+
+        r_p=+r_p.toFixed(2);
+        l_p=+l_p.toFixed(2);
+
+        console.log("Left phase is "+l_p+"%");
+        console.log("Right phase is "+r_p+"%");
+
+         document.getElementById("pfrac1").innerHTML = "Left phase is "+l_p+"%";
+    document.getElementById("pfrac2").innerHTML = "Right phase is "+r_p+"%";
+
+      microstructure(l_p,r_p);
+
+
+
+
+    } else {
+    document.getElementById("pfrac1").innerHTML = "Phase is 100%";
+    document.getElementById("pfrac2").innerHTML = "";
+    }
+   
+
+
+
+
+  }, false);
+
+
+function microstructure(l,r){
+
+var c = document.getElementById("canMS");
+var ctx = c.getContext("2d");
+var coords = [ [150,50], [20,85], [160,95] ];
+
+var oc_x=c.width/2; //Outercircle coordinates
+var oc_y=c.height/2;
+var oc_rad=200;
+
+ctx.clearRect(0, 0, c.width, c.height);
+
+
+
+
+ctx.beginPath();
+ctx.arc(oc_x, oc_y, oc_rad, 0, 2 * Math.PI);
+ctx.stroke(); 
+ctx.closePath();
+
+var l_p=l;
+var r_p=100-r_p;
+/*var min;
+if(l_p>=r_p){
+  min=r_p;
+} else {
+  min=l_p;
+}*/
+
+var n_circle=Math.floor((125663.71*l_p/100)/78.54);
+
+var cord=[];
+while(cord.length!=n_circle){
+  var ran_x=Math.random()*400;
+  var ran_y=Math.random()*400;
+  var dist=Math.sqrt(Math.pow((ran_x-oc_x),2)+Math.pow((ran_y-oc_y),2));
+  if(dist<195){
+    cord.push([ran_x,ran_y])
+
+  }
+
+  
+}
+
+ctx.beginPath();
+for(var i = 0; i < cord.length; i++){
+    ctx.moveTo(cord[i][0], cord[i][1]);
+    ctx.arc(cord[i][0], cord[i][1], 5, 0, Math.PI * 2, true);
+}
+ctx.fill();
+
+
+
+}
+
+var image = new Image();
+image.onload = function () {
+    ctx.drawImage(image, 0, 0);
+
+    
+    var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    var data = imgData.data;
+    
+
+    /*
+    for (var i = 0; i < data.length; i += 4) {
+        var grayscale = 0.33 * data[i] + 0.5 * data[i + 1] + 0.15 * data[i + 2];
+        data[i] = grayscale;
+        data[i + 1] = grayscale;
+        data[i + 2] = grayscale;
+    }
+
+    // write the modified image data
+    ctx.putImageData(imgData, 0, 0);
+    */
+
+}
+image.crossOrigin = "Anonymous";
+image.src="https://i.ibb.co/HtVvzgZ/pbsn.png";
+//image.src = "https://i.ibb.co/hMFynpY/pde.png";
+
+</script>
+
+</body>
+</html>
