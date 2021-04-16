@@ -1,0 +1,8 @@
+#stack {
+    position:absolute;
+    }
+#stack > canvas {
+    position:absolute;
+    left:0;
+    top:0;
+    }
