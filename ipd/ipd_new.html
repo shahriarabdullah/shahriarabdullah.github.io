@@ -1,0 +1,45 @@
+<html>
+<head><title>Interactive Phase Diagram | Shahriar</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div style="font-family: Verdana, Arial, Helvetica, sans-serif;">
+	<p style="font-size: 30px;">INTERACTIVE PHASE DIAGRAM</p>
+	<p id="phase_name">Phase:</p>
+	<p id="phase_frac">Phase percentage:</p>
+	<p id="phase_comp">Phase composition:</p>
+	<button onclick="microstructure();">Draw</button>
+	<hr>
+</div>
+
+
+ <div class="dropdown">
+  <button class="dropbtn">Select an alloy system</button>
+  <div class="dropdown-content">
+    <a href="#">Cu-Ni</a>
+    <a href="#">Pb-Sn</a>
+    <a href="#">Fe-Fe3C</a>
+  </div>
+</div> 
+
+<br>
+
+<div id="stack">
+<canvas class="ll" id="can_phase_diagram" width="660" height="510">Your browser isn't supported!</canvas>
+<canvas class="ll" id="can_phase_top" width="660" height="510">Your browser isn't supported!</canvas>
+<canvas class="ll" id="can_drawing" width="660" height="510">Your browser isn't supported!</canvas>
+</div>
+
+<div id="ms_stack">
+<canvas id="can_ms" width="400" height="400">Your browser isn't supported!</canvas>
+<canvas id="can_ms_top" width="400" height="400">Your browser isnt' supported!</canvas>
+</div>
+
+
+
+<script src="phase.js"></script>
+</body>
+
+</html>
