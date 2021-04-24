@@ -21,6 +21,8 @@ var is_isothermal="No";
 var img_width,img_height;
 var ratio=1;
 
+var ms_rad=can_ms_top.width/2;
+
 //Resizing the canvas
 function resize_canv(){
 	var w=window.innerWidth;
@@ -31,6 +33,9 @@ function resize_canv(){
 	 	reposition_ms();
 	} else {
 		w=img_width;
+		if(img_width+(ms_rad*2)<w){
+			reposition_ms();
+		}
 	}
 
 	set_size(canvas,w,img_height);
@@ -220,11 +225,11 @@ canvas_drawing.addEventListener('click', function(evt) {
 			if(phases[phase_col][3]=="L"){
 				//console.log("Background phase col="+phases[phase_col][1]);
 				ctx_ms_top.clearRect(0,0,can_ms_top.width,can_ms_top.height);
-				point_circle(ctx_ms_top,200,200,200,torgb("0,0,0"),torgb(phases[phase_col][1]));
+				point_circle(ctx_ms_top,ms_rad,ms_rad,ms_rad,torgb("0,0,0"),torgb(phases[phase_col][1]));
 				microstructure(left_phase_frac,"rgb("+phases[phase_col][2]+")");	
 			} else if(phases[phase_col][3]=="R") {
 				ctx_ms_top.clearRect(0,0,can_ms_top.width,can_ms_top.height);
-				point_circle(ctx_ms_top,200,200,200,torgb("0,0,0"),torgb(phases[phase_col][1]));
+				point_circle(ctx_ms_top,ms_rad,ms_rad,ms_rad,torgb("0,0,0"),torgb(phases[phase_col][1]));
 				microstructure(right_phase_frac,torgb(phases[phase_col][2]));
 			}
 			
@@ -236,7 +241,7 @@ canvas_drawing.addEventListener('click', function(evt) {
 	} else if(single_phasez.includes(str_rgb)) { //Single phase zone
 		ctx_ms_top.clearRect(0,0,can_ms_top.width,can_ms_top.height);
 		var bgc="rgb("+str_rgb+")";
-		point_circle(ctx_ms_top,200,200,200,"black",bgc);
+		point_circle(ctx_ms_top,ms_rad,ms_rad,ms_rad,"black",bgc);
 		document.getElementById("phase_name").innerHTML="Phase: <b>"+phases[str_rgb]+"</b>";
 		document.getElementById("phase_frac").innerHTML="Phase percentage: <b>100%</b>";
 		var pc=((mousePos.x-left_margin)*scale).toFixed(2);
@@ -324,10 +329,10 @@ function microstructure(phase_frac,grain_col){
 	var i=1;
 
 	for(i=1;i<=num_grain;i++){
-		x=Math.random()*400;
-		y=Math.random()*400;
-		dist=Math.sqrt(Math.pow((x-200),2)+Math.pow((y-200),2));
-		if(dist<192){
+		x=Math.random()*ms_rad*2;
+		y=Math.random()*ms_rad*2;
+		dist=Math.sqrt(Math.pow((x-ms_rad),2)+Math.pow((y-ms_rad),2));
+		if(dist<ms_rad-8){
 			point_circle(ctx_ms_top,x,y,8,grain_col,grain_col);
 		}
 
@@ -352,8 +357,8 @@ function reposition_ms(){
 	e_can_ms=document.getElementById('can_ms');
 	e_can_ms_top=document.getElementById('can_ms_top');
 
-	e_can_ms.style.top=image_height+70;
-	e_can_ms_top.style.top=image_height+70;
+	e_can_ms.style.top=canvas.height;
+	e_can_ms_top.style.top=canvas.height;
 
 	e_can_ms.style.left=0;
 	e_can_ms_top.style.left=0;
