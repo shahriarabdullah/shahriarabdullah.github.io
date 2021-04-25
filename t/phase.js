@@ -30,9 +30,9 @@ var d_phase, d_prcnt, d_comp, d_temp="",d_iso="";
 
 //Resizing the canvas
 function resize_canv(){
-	var w=window.innerWidth;
+	//var w=window.innerWidth;
 
-	if(w<img_width){
+	/*if(w<img_width){
 		img_width=w;
 	 	image_height=w*ratio;
 	 	reposition_ms();
@@ -41,11 +41,11 @@ function resize_canv(){
 		if(img_width+(ms_rad*2)<w){
 			reposition_ms();
 		}
-	}
-
-	set_size(canvas,w,img_height);
-	set_size(canvas_phasetop,w,img_height);
-	set_size(canvas_drawing,w,img_height);
+	}*/
+	reposition_ms();
+	set_size(canvas,img_width,img_height);
+	set_size(canvas_phasetop,img_width,img_height);
+	set_size(canvas_drawing,img_width,img_height);
 }
 
 //Loading image
