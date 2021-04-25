@@ -42,9 +42,7 @@ function resize_canv(){
 			reposition_ms();
 		}
 	}*/
-	if(window.innerWidth<img_width){
-		alert("w="+window.innerWidth+" and imw="+img_width);
-	}
+	
 	reposition_ms();
 	set_size(canvas,img_width,img_height);
 	set_size(canvas_phasetop,img_width,img_height);
@@ -82,7 +80,7 @@ img_ms_lamella.onload=function(){ //Microstructure lamella
 	var imgData = ctx_ms.getImageData(0,0,can_ms.height,can_ms.height);
 }
 
-
+alert("w="+window.innerWidth+" and imw="+img_width);
 function load_image(canv,canv_ctx,img){ //Function for loading image to desired canvas
 	var w=window.innerWidth;
 	canv_ctx.drawImage(img,0,0,img_width,img_height); //Resizing the image to fit the canvas
