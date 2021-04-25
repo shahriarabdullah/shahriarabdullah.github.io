@@ -42,7 +42,7 @@ function resize_canv(){
 			reposition_ms();
 		}
 	}*/
-	
+
 	reposition_ms();
 	set_size(canvas,img_width,img_height);
 	set_size(canvas_phasetop,img_width,img_height);
@@ -168,7 +168,7 @@ canvas_drawing.addEventListener('click', function(evt) {
 
 	if (two_phasez.includes(str_rgb)){ //If two phase zone
 		//console.log("Two phase");
-		alert("w="+window.innerWidth+" and imw="+img_width);
+		
 		var left_boundary,right_boundary,left_phase_frac,right_phase_frac,l,r;
 
 		var nx=mousePos.x;
@@ -276,7 +276,7 @@ canvas_drawing.addEventListener('click', function(evt) {
 		console.log("Eutectic Point");
 		
 	}
-
+legend();
   }, false);
 
 function point_circle(context,x,y,rad,stroke_color,fill_color){
@@ -404,8 +404,17 @@ function show_data(){
 }
 
 function legend(){
-	var y=10;
+	var y=20;
+	var c;
 	for	(var i=0;i<3;i++){
-		point_circle(ctx_ms_top,220,y+(10*i),10)
+		c=torgb(single_phasez[i]);
+		point_circle(ctx_ms_top,280,y+(40*i),10,c,c);
+		text(ctx_ms_top,300,y+(40*i)+5,phases[single_phasez[i]]);
 	}
+}
+
+function text(context,x,y,txt){
+	context.fillStyle="black";
+	context.font = "15px Arial";
+	context.fillText(txt, x, y); 
 }
