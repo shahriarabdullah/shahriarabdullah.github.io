@@ -19,9 +19,14 @@ var ctx_ms_top=can_ms_top.getContext('2d');
 var scale=0,left_margin=0,right_margin=0,top_margin=0,left_margin=0,ms_loaded=0;
 var is_isothermal="No";
 var img_width,img_height;
+var temp_low=50,temp_high=350,scale_temp;
 var ratio=1;
 
 var ms_rad=can_ms_top.width/2;
+var area=Math.PI*Math.pow(ms_rad,2);
+var area_grain=Math.PI*Math.pow(8,2);
+
+var d_phase, d_prcnt, d_comp, d_temp="",d_iso="";
 
 //Resizing the canvas
 function resize_canv(){
@@ -70,7 +75,8 @@ img_back_phase.onload=function(){ //Loading background image
 img_back_phase.src="https://i.ibb.co/S35T8QQ/pbsn.png";
 
 img_ms_lamella.onload=function(){ //Microstructure lamella
-	load_image(can_ms,ctx_ms,img_ms_lamella);
+	ctx_ms.drawImage(img_ms_lamella,0,0,can_ms.width,can_ms.height);
+	var imgData = ctx_ms.getImageData(0,0,can_ms.width,can_ms.height);
 }
 
 
@@ -78,7 +84,7 @@ function load_image(canv,canv_ctx,img){ //Function for loading image to desired 
 	var w=window.innerWidth;
 	canv_ctx.drawImage(img,0,0,img_width,img_height); //Resizing the image to fit the canvas
 	var imgData = ctx.getImageData(0, 0, canv.width, canv.height);
-    var data = imgData.data;
+    //var data = imgData.data;
 }
 
 //Image loading done
@@ -86,7 +92,7 @@ function load_image(canv,canv_ctx,img){ //Function for loading image to desired 
 var phases={
     "208,239,114":["Pb+Liq.","245,58,133","239,228,176","L"], //[Phase,Back phase col,grain_phase,left/right]
     "200,191,231":["Liq.+Sn","245,58,133","112,146,190","R"],
-    "181,230,29":"Pb+Sn",
+    "181,230,29":["Pb+Sn","239,228,176","112,146,190","L"],
     "239,228,176":"Pb",
     "112,146,190":"Sn",
     "245,58,133":"Liq."
@@ -97,7 +103,9 @@ var lamella=["181,230,29"];
 var two_phasez=["208,239,114","200,191,231","181,230,29"];
 var single_phasez=["239,228,176","112,146,190","245,58,133"];
 var eutectic=["0,162,232"];
-
+var isothermal_reactions={
+	"0,162,232":"Liq ⇌ Pb+Sn"
+};
 
 //Function for getting mouse position
 function getMousePos(canvas, evt) {
@@ -149,7 +157,11 @@ canvas_drawing.addEventListener('click', function(evt) {
 	ctxDraw.stroke(); 
 	//Marking done
 
-	
+	if(mousePos.y>top_margin && mousePos.y<bottom_margin){
+		d_temp=(mousePos.y-top_margin)*scale_temp;
+		d_temp=temp_high-d_temp;
+		d_temp=d_temp.toFixed(2);
+	}
 
 	//Checking phase type
 
@@ -163,7 +175,8 @@ canvas_drawing.addEventListener('click', function(evt) {
 		pxl=ctx.getImageData(nx,ny,1,1).data;
 		str_rgb=pxl[0]+","+pxl[1]+","+pxl[2];
 
-		document.getElementById("phase_name").innerHTML="Phase: <b>"+phases[str_rgb][0]+"</b>";
+		//document.getElementById("phase_name").innerHTML="Phase: <b>"+phases[str_rgb][0]+"</b>";
+		d_phase=phases[str_rgb][0];
 
 
 		while(str_rgb==phase_col){ //Finding left phase boundary
@@ -178,7 +191,7 @@ canvas_drawing.addEventListener('click', function(evt) {
 		l=(mousePos.x-nx)*scale;
 		
 
-		str_rgb=phase_col; //Flashing str_rgb
+		str_rgb=phase_col; //Resetting str_rgb
 		nx=mousePos.x; //Resetting nx
 
 
@@ -207,21 +220,25 @@ canvas_drawing.addEventListener('click', function(evt) {
 		console.log("Left phase fraction: "+left_phase_frac+"%");
 		console.log("Right phase fraction: "+right_phase_frac+"%");
 
-		document.getElementById("phase_frac").innerHTML = "Phase percentage : "+phases[phases[phase_col][1]]+" = <b>"+left_phase_frac+"%</b> | "+phases[phases[phase_col][2]]+" = <b>"+right_phase_frac+"%</b>";
-		document.getElementById("phase_comp").innerHTML = "Phase composition: "+phases[phases[phase_col][1]]+" = <b>"+left_boundary + "</b> | "+phases[phases[phase_col][2]]+" = <b>"+right_boundary+"</b>";
 
-		if(lamella.includes(phase_col)){ //Checking if phase has eutectic lamella
+		d_prcnt=phases[phases[phase_col][1]]+" = <b>"+left_phase_frac+"%</b> | "+phases[phases[phase_col][2]]+" = <b>"+right_phase_frac+"%</b>";
+		d_comp=phases[phases[phase_col][1]]+" = <b>"+left_boundary + "</b> | "+phases[phases[phase_col][2]]+" = <b>"+right_boundary+"</b>";
+		show_data();
+	
+
+		if(lamella.includes(phase_col)){ //Checking if phase has eutectic lamellae
 
 			ctx_ms_top.clearRect(0,0,can_ms_top.width,can_ms_top.height);
 			if(ms_loaded==0){ //Loading lamella image
-			img_ms_lamella.src="https://i.ibb.co/bdP6mXG/rsz-lamella.png";
+			
+			img_ms_lamella.src="https://i.ibb.co/NCQvnV3/lamellae-pbsn.png";
 			ms_loaded=1;
 		}
-		microstructure(left_phase_frac);
+
+		microstructure(left_phase_frac,torgb(phases[phase_col][1]),"black");
 		} else{ //Two phase but not eutectic
 			//Draw two phase microstructure here
-			//console.log(phases[str_rgb]);
-			//console.log("str rgb="+phase_col);
+			
 			if(phases[phase_col][3]=="L"){
 				//console.log("Background phase col="+phases[phase_col][1]);
 				ctx_ms_top.clearRect(0,0,can_ms_top.width,can_ms_top.height);
@@ -236,28 +253,34 @@ canvas_drawing.addEventListener('click', function(evt) {
 			//ms_loaded=0;
 		}
 		
-	is_isothermal="No";
+	//is_isothermal="No";
 
 	} else if(single_phasez.includes(str_rgb)) { //Single phase zone
 		ctx_ms_top.clearRect(0,0,can_ms_top.width,can_ms_top.height);
 		var bgc="rgb("+str_rgb+")";
 		point_circle(ctx_ms_top,ms_rad,ms_rad,ms_rad,"black",bgc);
-		document.getElementById("phase_name").innerHTML="Phase: <b>"+phases[str_rgb]+"</b>";
-		document.getElementById("phase_frac").innerHTML="Phase percentage: <b>100%</b>";
-		var pc=((mousePos.x-left_margin)*scale).toFixed(2);
-		document.getElementById("phase_comp").innerHTML="Phase composition: "+"<b>"+pc+"</b>";
-		is_isothermal="No";
+		d_phase=phases[str_rgb];
+		d_prcnt="100%";
+		
+		d_comp=((mousePos.x-left_margin)*scale).toFixed(2);
+
+		
+		show_data();
 	} else if(eutectic.includes(str_rgb)){
-		is_isothermal="Eutectic";
+		d_phase="Liq.+Pb+Sn";
+		d_comp=((mousePos.x-left_margin)*scale).toFixed(2);
+		d_iso="Eutectic | Eutectic Reaction: <b>"+isothermal_reactions[str_rgb]+"</b>";
+		show_data();
+		
 		console.log("Eutectic Point");
-		document.getElementById("isothermal").innerHTML="Isothermal point: "+is_isothermal;
+		
 	}
 
   }, false);
 
 function point_circle(context,x,y,rad,stroke_color,fill_color){
 	context.beginPath(); //Drawing the point circle
-	//context.strokeStyle="rgb("+stroke_color+")";
+	
 	context.strokeStyle=stroke_color;
 	context.arc(x,y,rad, 0, 2 * Math.PI, false);
 	context.fillStyle = fill_color;
@@ -268,9 +291,8 @@ function point_circle(context,x,y,rad,stroke_color,fill_color){
 
 function scaling(){
 
-	var nx=canvas.width/2;
+	var nx=canvas.width/2; //Beginning from the center of the canvas
 	var ny=canvas.height/2;
-
 
 	var pxl=ctx.getImageData(nx,ny,1,1).data; //Getting pixel data
     var str_rgb=pxl[0]+","+pxl[1]+","+pxl[2];
@@ -293,7 +315,7 @@ function scaling(){
 		}
 		right_margin=nx;
 
-	scale=100/(right_margin-left_margin);
+	scale=100/(right_margin-left_margin); //Scale for x axis
 
 	str_rgb="";
 	nx=canvas.width/2;
@@ -304,6 +326,7 @@ function scaling(){
 			str_rgb=pxl[0]+","+pxl[1]+","+pxl[2];
 		}
 		top_margin=ny;
+		console.log("top margin= "+top_margin);
 
 	str_rgb="";
 	ny=canvas.height/2;
@@ -314,18 +337,20 @@ function scaling(){
 			str_rgb=pxl[0]+","+pxl[1]+","+pxl[2];
 		}
 		bottom_margin=ny;
+		console.log("bottom margin= "+bottom_margin);
+	scale_temp=(temp_high-temp_low)/(bottom_margin-top_margin);
 
 }
 
-function microstructure(phase_frac,grain_col){
+function microstructure(phase_frac,grain_col,border_col){
 	//ctx_ms_top.clearRect(0,0,can_ms_top.width,can_ms_top.height);
+	if(border_col==null){
+		border_col=grain_col;
+	}
+	
 
-	//console.log("bgpc="+bgpc);
-	//point_circle(ctx_ms_top,200,200,200,"black",bgpc);
-	//var grain_x=[];
-	//var grain_y=[];
 	var x,y,dist;
-	var num_grain=(125663*phase_frac/(201*100));
+	var num_grain=(area*phase_frac/(area_grain*100));
 	var i=1;
 
 	for(i=1;i<=num_grain;i++){
@@ -333,7 +358,7 @@ function microstructure(phase_frac,grain_col){
 		y=Math.random()*ms_rad*2;
 		dist=Math.sqrt(Math.pow((x-ms_rad),2)+Math.pow((y-ms_rad),2));
 		if(dist<ms_rad-8){
-			point_circle(ctx_ms_top,x,y,8,grain_col,grain_col);
+			point_circle(ctx_ms_top,x,y,8,border_col,grain_col);
 		}
 
 	}
@@ -363,4 +388,16 @@ function reposition_ms(){
 	e_can_ms.style.left=0;
 	e_can_ms_top.style.left=0;
 
+}
+
+function draw(){
+	alert('hello');
+}
+
+function show_data(){
+	document.getElementById("phase_name").innerHTML="Phase: <b>"+d_phase+"</b>";
+	document.getElementById("phase_frac").innerHTML="Phase percentage: <b>"+d_prcnt+"</b>";
+	document.getElementById("phase_comp").innerHTML="Phase composition: "+"<b>"+d_comp+"</b>";
+	document.getElementById("isothermal").innerHTML="Isothermal point: "+d_iso;
+	document.getElementById("temp").innerHTML="Temperature: <b>"+d_temp+"°C<b>"
 }
