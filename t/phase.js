@@ -42,6 +42,9 @@ function resize_canv(){
 			reposition_ms();
 		}
 	}*/
+	if(window.innerWidth<img_width){
+		alert("w="+window.innerWidth+" and imw="+img_width);
+	}
 	reposition_ms();
 	set_size(canvas,img_width,img_height);
 	set_size(canvas_phasetop,img_width,img_height);
