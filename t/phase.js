@@ -80,7 +80,7 @@ img_ms_lamella.onload=function(){ //Microstructure lamella
 	var imgData = ctx_ms.getImageData(0,0,can_ms.height,can_ms.height);
 }
 
-alert("w="+window.innerWidth+" and imw="+img_width);
+
 function load_image(canv,canv_ctx,img){ //Function for loading image to desired canvas
 	var w=window.innerWidth;
 	canv_ctx.drawImage(img,0,0,img_width,img_height); //Resizing the image to fit the canvas
@@ -168,7 +168,7 @@ canvas_drawing.addEventListener('click', function(evt) {
 
 	if (two_phasez.includes(str_rgb)){ //If two phase zone
 		//console.log("Two phase");
-		
+		alert("w="+window.innerWidth+" and imw="+img_width);
 		var left_boundary,right_boundary,left_phase_frac,right_phase_frac,l,r;
 
 		var nx=mousePos.x;
