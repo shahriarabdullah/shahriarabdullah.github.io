@@ -22,7 +22,7 @@ var img_width,img_height;
 var temp_low=50,temp_high=350,scale_temp;
 var ratio=1;
 
-var ms_rad=can_ms_top.width/2;
+var ms_rad=can_ms_top.height/2;
 var area=Math.PI*Math.pow(ms_rad,2);
 var area_grain=Math.PI*Math.pow(8,2);
 
@@ -75,8 +75,8 @@ img_back_phase.onload=function(){ //Loading background image
 img_back_phase.src="https://i.ibb.co/S35T8QQ/pbsn.png";
 
 img_ms_lamella.onload=function(){ //Microstructure lamella
-	ctx_ms.drawImage(img_ms_lamella,0,0,can_ms.width,can_ms.height);
-	var imgData = ctx_ms.getImageData(0,0,can_ms.width,can_ms.height);
+	ctx_ms.drawImage(img_ms_lamella,0,0,can_ms.height,can_ms.height);
+	var imgData = ctx_ms.getImageData(0,0,can_ms.height,can_ms.height);
 }
 
 
@@ -400,4 +400,11 @@ function show_data(){
 	document.getElementById("phase_comp").innerHTML="Phase composition: "+"<b>"+d_comp+"</b>";
 	document.getElementById("isothermal").innerHTML="Isothermal point: "+d_iso;
 	document.getElementById("temp").innerHTML="Temperature: <b>"+d_temp+"°C<b>"
+}
+
+function legend(){
+	var y=10;
+	for	(var i=0;i<3;i++){
+		point_circle(ctx_ms_top,220,y+(10*i),10)
+	}
 }
