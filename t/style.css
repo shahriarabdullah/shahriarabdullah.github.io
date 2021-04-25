@@ -1,5 +1,6 @@
 #stack {
     position:absolute;
+    max-width: 100%;
     }
 #stack > canvas {
     position:absolute;
