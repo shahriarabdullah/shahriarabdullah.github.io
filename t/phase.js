@@ -27,7 +27,7 @@ var area=Math.PI*Math.pow(ms_rad,2);
 var area_grain=Math.PI*Math.pow(8,2);
 
 var d_phase, d_prcnt, d_comp, d_temp="",d_iso="",d_dof,d_p;
-var comp_unit=[" wt% Sn","wt% Ni"];
+var comp_unit=[" wt% Sn","wt% Ni","wt% Ag"];
 var comp_unit_i=0;
 //Resizing the canvas
 function resize_canv(){
@@ -92,21 +92,27 @@ function load_image(canv,canv_ctx,img){ //Function for loading image to desired 
 //Image loading done
 
 var phases={
-    "208,239,114":["Pb+Liq.","245,58,133","239,228,176","L"], //[Phase,Back phase col,grain_phase,left/right]
-    "200,191,231":["Liq.+Sn","245,58,133","112,146,190","R"],
-    "181,230,29":["Pb+Sn","239,228,176","112,146,190","L"],
+    "208,239,114":["Pb+Liq.","245,58,133","239,228,176","L",2], //[Phase,Back phase col,grain_phase,left/right,left phase]
+    "200,191,231":["Liq.+Sn","245,58,133","112,146,190","R",1],
+    "181,230,29":["Pb+Sn","239,228,176","112,146,190","L",1],
     "239,228,176":"Pb",
     "112,146,190":"Sn",
     "245,58,133":"Liq.",
     "243,243,69":"Cu",
     "187,202,206":"Ni",
-    "188,208,49":["Cu+Ni","243,243,69","187,202,206","L"]
+    "188,208,49":["Cu+Ni","243,243,69","187,202,206","R",1],
+    "104,242,115":"Pt",
+    "203,247,100":"Ag",
+    "56,112,141":"Liq.",
+    "233,114,114":["Liq.+Pt","56,112,141","104,242,115","L",2],
+    "248,37,74":["Pt+Ag","104,242,115","203,247,100","L",1],
+    "223,123,221":["Liq.+Ag","56,112,141","203,247,100","L",2]
 };
 
 var lamella=["181,230,29"];
 
-var two_phasez=["208,239,114","200,191,231","181,230,29","188,208,49"];
-var single_phasez=["239,228,176","112,146,190","245,58,133","243,243,69","187,202,206"];
+var two_phasez=["208,239,114","200,191,231","181,230,29","188,208,49","233,114,114","248,37,74","223,123,221"];
+var single_phasez=["239,228,176","112,146,190","245,58,133","243,243,69","187,202,206","56,112,141","104,242,115","203,247,100"];
 var eutectic=["0,162,232"];
 var isothermal_reactions={
 	"0,162,232":"Liq ⇌ Pb+Sn"
@@ -226,8 +232,14 @@ canvas_drawing.addEventListener('click', function(evt) {
 		console.log("Right phase fraction: "+right_phase_frac+"%");
 
 
-		d_prcnt=phases[phases[phase_col][1]]+" = <b>"+left_phase_frac+"%</b> | "+phases[phases[phase_col][2]]+" = <b>"+right_phase_frac+"%</b>";
-		d_comp=phases[phases[phase_col][1]]+" = <b>"+left_boundary + "</b> | "+phases[phases[phase_col][2]]+" = <b>"+right_boundary+"</b>";
+		if(phases[phase_col][4]==1){
+			d_prcnt=phases[phases[phase_col][1]]+" = <b>"+left_phase_frac+"%</b> | "+phases[phases[phase_col][2]]+" = <b>"+right_phase_frac+"%</b>";
+			d_comp=phases[phases[phase_col][1]]+" = <b>"+left_boundary + "</b> | "+phases[phases[phase_col][2]]+" = <b>"+right_boundary+"</b>";	
+		} else {
+			d_prcnt=phases[phases[phase_col][2]]+" = <b>"+left_phase_frac+"%</b> | "+phases[phases[phase_col][1]]+" = <b>"+right_phase_frac+"%</b>";
+			d_comp=phases[phases[phase_col][2]]+" = <b>"+left_boundary + "</b> | "+phases[phases[phase_col][1]]+" = <b>"+right_boundary+"</b>";	
+		}
+		
 		
 	
 
@@ -433,6 +445,7 @@ function text(context,x,y,txt){
 
 function set_param(selection){
 	ctxPhaseTop.clearRect(0,0,img_width,img_height);
+	ctxDraw.clearRect(0,0,img_width,img_height);
 	ctx.clearRect(0,0,img_width,img_height);
 	ctx_ms_top.clearRect(0,0,200,200);
 	ctx_ms.clearRect(0,0,200,200);
@@ -452,5 +465,12 @@ function set_param(selection){
 		comp_unit_i=0;
 		lgd_start=0;
 		lgd_end=2;
+	} else if(selection="PtAg"){
+		img_top_phase.src="https://i.ibb.co/WGhdX0T/ptag-top.png";
+		img_back_phase.src="https://i.ibb.co/gj6rdp1/ptag.png";
+		temp_high=2000; temp_low=400;
+		comp_unit_i=2;
+		lgd_start=5;
+		lgd_end=7;
 	}
 }
