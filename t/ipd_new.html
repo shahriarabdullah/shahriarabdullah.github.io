@@ -1,8 +1,7 @@
 <html>
 <head><title>Interactive Phase Diagram | Shahriar</title>
-	 <meta name="viewport" content="width=device-width, initial-scale=0.5"/>
 	<link rel="stylesheet" href="style.css">
-	
+	<meta name="viewport" content="width=device-width, initial-scale=0.5"/>
 </head>
 
 <body>
@@ -12,6 +11,7 @@
 	<p id="phase_name">Phase:</p>
 	<p id="phase_frac">Phase percentage:</p>
 	<p id="phase_comp">Phase composition:</p>
+	<p id="dof">Degree of freedom:</p>
 	<p id="isothermal">Isothermal point:</p>
 	<p id="temp">Temperature:</p>
 	<button onclick="microstructure();">Draw</button>
@@ -22,8 +22,8 @@
  <div class="dropdown">
   <button class="dropbtn">Select an alloy system</button>
   <div class="dropdown-content">
-    <a onclick="draw();">Cu-Ni</a>
-    <a href="#">Pb-Sn</a>
+    <a onclick="set_param('CuNi');">Cu-Ni</a>
+    <a onclick="set_param('PbSn');">Pb-Sn</a>
     <a href="#">Fe-Fe3C</a>
   </div>
 </div> 
