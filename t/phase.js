@@ -245,7 +245,7 @@ canvas_drawing.addEventListener('click', function(evt) {
 
 		if(lamella.includes(phase_col)){ //Checking if phase has eutectic lamellae
 
-			ctx_ms_top.clearRect(0,0,can_ms_top.width,can_ms_top.height);
+			ctx_ms_top.clearRect(0,0,can_ms_top.width/2,can_ms_top.height);
 			if(ms_loaded==0){ //Loading lamella image
 			
 			img_ms_lamella.src="https://i.ibb.co/NCQvnV3/lamellae-pbsn.png";
@@ -258,11 +258,11 @@ canvas_drawing.addEventListener('click', function(evt) {
 			
 			if(phases[phase_col][3]=="L"){
 				//console.log("Background phase col="+phases[phase_col][1]);
-				ctx_ms_top.clearRect(0,0,can_ms_top.width,can_ms_top.height);
+				ctx_ms_top.clearRect(0,0,can_ms_top.width/2,can_ms_top.height);
 				point_circle(ctx_ms_top,ms_rad,ms_rad,ms_rad,torgb("0,0,0"),torgb(phases[phase_col][1]));
 				microstructure(left_phase_frac,"rgb("+phases[phase_col][2]+")");	
 			} else if(phases[phase_col][3]=="R") {
-				ctx_ms_top.clearRect(0,0,can_ms_top.width,can_ms_top.height);
+				ctx_ms_top.clearRect(0,0,can_ms_top.width/2,can_ms_top.height);
 				point_circle(ctx_ms_top,ms_rad,ms_rad,ms_rad,torgb("0,0,0"),torgb(phases[phase_col][1]));
 				microstructure(right_phase_frac,torgb(phases[phase_col][2]));
 			}
@@ -274,7 +274,7 @@ canvas_drawing.addEventListener('click', function(evt) {
 	//is_isothermal="No";
 
 	} else if(single_phasez.includes(str_rgb)) { //Single phase zone
-		ctx_ms_top.clearRect(0,0,can_ms_top.width,can_ms_top.height);
+		ctx_ms_top.clearRect(0,0,can_ms_top.width/2,can_ms_top.height);
 		var bgc="rgb("+str_rgb+")";
 		point_circle(ctx_ms_top,ms_rad,ms_rad,ms_rad,"black",bgc);
 		d_phase=phases[str_rgb];
@@ -404,8 +404,8 @@ function reposition_ms(){
 	e_can_ms=document.getElementById('can_ms');
 	e_can_ms_top=document.getElementById('can_ms_top');
 
-	e_can_ms.style.top=img_height;
-	e_can_ms_top.style.top=img_height;
+	e_can_ms.style.top=img_height+10;
+	e_can_ms_top.style.top=img_height+10;
 
 	e_can_ms.style.left=0;
 	e_can_ms_top.style.left=0;
@@ -428,12 +428,13 @@ function show_data(){
 
 function legend(){
 	var y=20;
-	var c;
-	for	(var i=lgd_start;i<=lgd_end;i++){
+	var c,i;
+	for	(i=lgd_start;i<=lgd_end;i++){
 		c=torgb(single_phasez[i]);
-		point_circle(ctx_ms_top,280,y+(40*i),10,c,c);
-		text(ctx_ms_top,300,y+(40*i)+5,phases[single_phasez[i]]);
+		point_circle(ctx_ms_top,280,y+(40*(i-lgd_start)),10,c,c);
+		text(ctx_ms_top,300,y+(40*(i-lgd_start))+5,phases[single_phasez[i]]);
 	}
+
 	lgd=1;
 }
 
@@ -447,8 +448,8 @@ function set_param(selection){
 	ctxPhaseTop.clearRect(0,0,img_width,img_height);
 	ctxDraw.clearRect(0,0,img_width,img_height);
 	ctx.clearRect(0,0,img_width,img_height);
-	ctx_ms_top.clearRect(0,0,200,200);
-	ctx_ms.clearRect(0,0,200,200);
+	ctx_ms_top.clearRect(0,0,400,400);
+	ctx_ms.clearRect(0,0,400,400);
 	scale=0;
 	lgd=0;
 	if(selection=="CuNi"){
