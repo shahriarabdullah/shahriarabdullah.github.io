@@ -20,14 +20,15 @@ var scale=0,left_margin=0,right_margin=0,top_margin=0,left_margin=0,ms_loaded=0;
 var is_isothermal="No";
 var img_width,img_height;
 var temp_low=50,temp_high=350,scale_temp;
-var ratio=1;
+var ratio=1,lgd=0,lgd_start=0,lgd_end=2;
 
 var ms_rad=can_ms_top.height/2;
 var area=Math.PI*Math.pow(ms_rad,2);
 var area_grain=Math.PI*Math.pow(8,2);
 
-var d_phase, d_prcnt, d_comp, d_temp="",d_iso="";
-
+var d_phase, d_prcnt, d_comp, d_temp="",d_iso="",d_dof,d_p;
+var comp_unit=[" wt% Sn","wt% Ni"];
+var comp_unit_i=0;
 //Resizing the canvas
 function resize_canv(){
 	//var w=window.innerWidth;
@@ -96,13 +97,16 @@ var phases={
     "181,230,29":["Pb+Sn","239,228,176","112,146,190","L"],
     "239,228,176":"Pb",
     "112,146,190":"Sn",
-    "245,58,133":"Liq."
+    "245,58,133":"Liq.",
+    "243,243,69":"Cu",
+    "187,202,206":"Ni",
+    "188,208,49":["Cu+Ni","243,243,69","187,202,206","L"]
 };
 
 var lamella=["181,230,29"];
 
-var two_phasez=["208,239,114","200,191,231","181,230,29"];
-var single_phasez=["239,228,176","112,146,190","245,58,133"];
+var two_phasez=["208,239,114","200,191,231","181,230,29","188,208,49"];
+var single_phasez=["239,228,176","112,146,190","245,58,133","243,243,69","187,202,206"];
 var eutectic=["0,162,232"];
 var isothermal_reactions={
 	"0,162,232":"Liq ⇌ Pb+Sn"
@@ -224,7 +228,7 @@ canvas_drawing.addEventListener('click', function(evt) {
 
 		d_prcnt=phases[phases[phase_col][1]]+" = <b>"+left_phase_frac+"%</b> | "+phases[phases[phase_col][2]]+" = <b>"+right_phase_frac+"%</b>";
 		d_comp=phases[phases[phase_col][1]]+" = <b>"+left_boundary + "</b> | "+phases[phases[phase_col][2]]+" = <b>"+right_boundary+"</b>";
-		show_data();
+		
 	
 
 		if(lamella.includes(phase_col)){ //Checking if phase has eutectic lamellae
@@ -253,7 +257,8 @@ canvas_drawing.addEventListener('click', function(evt) {
 			
 			//ms_loaded=0;
 		}
-		
+	d_p=2;
+	show_data();
 	//is_isothermal="No";
 
 	} else if(single_phasez.includes(str_rgb)) { //Single phase zone
@@ -265,18 +270,22 @@ canvas_drawing.addEventListener('click', function(evt) {
 		
 		d_comp=((mousePos.x-left_margin)*scale).toFixed(2);
 
-		
+		d_p=1;		
 		show_data();
 	} else if(eutectic.includes(str_rgb)){
 		d_phase="Liq.+Pb+Sn";
 		d_comp=((mousePos.x-left_margin)*scale).toFixed(2);
 		d_iso="Eutectic | Eutectic Reaction: <b>"+isothermal_reactions[str_rgb]+"</b>";
+		d_p=3;
 		show_data();
 		
 		console.log("Eutectic Point");
 		
 	}
-legend();
+if(lgd==0){
+	legend();	
+}
+
   }, false);
 
 function point_circle(context,x,y,rad,stroke_color,fill_color){
@@ -383,8 +392,8 @@ function reposition_ms(){
 	e_can_ms=document.getElementById('can_ms');
 	e_can_ms_top=document.getElementById('can_ms_top');
 
-	e_can_ms.style.top=canvas.height;
-	e_can_ms_top.style.top=canvas.height;
+	e_can_ms.style.top=img_height;
+	e_can_ms_top.style.top=img_height;
 
 	e_can_ms.style.left=0;
 	e_can_ms_top.style.left=0;
@@ -396,25 +405,52 @@ function draw(){
 }
 
 function show_data(){
+	d_dof=2-d_p+1;
 	document.getElementById("phase_name").innerHTML="Phase: <b>"+d_phase+"</b>";
 	document.getElementById("phase_frac").innerHTML="Phase percentage: <b>"+d_prcnt+"</b>";
-	document.getElementById("phase_comp").innerHTML="Phase composition: "+"<b>"+d_comp+"</b>";
+	document.getElementById("phase_comp").innerHTML="Phase composition: "+"<b>"+d_comp+"</b> ("+comp_unit[comp_unit_i]+")";
 	document.getElementById("isothermal").innerHTML="Isothermal point: "+d_iso;
 	document.getElementById("temp").innerHTML="Temperature: <b>"+d_temp+"°C<b>"
+	document.getElementById("dof").innerHTML="Degree of freedom: <b>"+d_dof+"</b> | C=2 P="+d_p;
 }
 
 function legend(){
 	var y=20;
 	var c;
-	for	(var i=0;i<3;i++){
+	for	(var i=lgd_start;i<=lgd_end;i++){
 		c=torgb(single_phasez[i]);
 		point_circle(ctx_ms_top,280,y+(40*i),10,c,c);
 		text(ctx_ms_top,300,y+(40*i)+5,phases[single_phasez[i]]);
 	}
+	lgd=1;
 }
 
 function text(context,x,y,txt){
 	context.fillStyle="black";
 	context.font = "15px Arial";
 	context.fillText(txt, x, y); 
+}
+
+function set_param(selection){
+	ctxPhaseTop.clearRect(0,0,img_width,img_height);
+	ctx.clearRect(0,0,img_width,img_height);
+	ctx_ms_top.clearRect(0,0,200,200);
+	ctx_ms.clearRect(0,0,200,200);
+	scale=0;
+	lgd=0;
+	if(selection=="CuNi"){
+		img_top_phase.src="https://i.ibb.co/Qjg43T0/cuni-top.png";
+		img_back_phase.src="https://i.ibb.co/fD5k494/cuni.png";
+		temp_high=1600; temp_low=1000;
+		comp_unit_i=1;
+		lgd_start=3;
+		lgd_end=4;
+	} else if(selection=="PbSn"){
+		img_top_phase.src="https://i.ibb.co/zPjP5fm/pbsn-top.png";
+		img_back_phase.src="https://i.ibb.co/S35T8QQ/pbsn.png";
+		temp_high=350; temp_low=50;
+		comp_unit_i=0;
+		lgd_start=0;
+		lgd_end=2;
+	}
 }
