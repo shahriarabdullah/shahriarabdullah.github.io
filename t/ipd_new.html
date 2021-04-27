@@ -6,19 +6,23 @@
 
 <body>
 
-<div style="font-family: Verdana, Arial, Helvetica, sans-serif;">
-	<p style="font-size: 30px;">INTERACTIVE PHASE DIAGRAM</p>
+<p style="font-size: 30px;">INTERACTIVE PHASE DIAGRAM</p>
+<div class="row" style="font-family: Verdana, Arial, Helvetica, sans-serif;">
+	<div class="column">
 	<p id="alloy_comp">Alloy composition:</p>
 	<p id="phase_name">Phase:</p>
 	<p id="phase_frac">Phase percentage:</p>
 	<p id="phase_comp">Phase composition:</p>
+	</div>
+	<div class="column">
 	<p id="dof">Degree of freedom:</p>
 	<p id="isothermal">Isothermal point:</p>
 	<p id="temp">Temperature:</p>
-	<button onclick="microstructure();">Draw</button>
-	<hr>
+	</div>
 </div>
 
+
+<hr>
 
  <div class="dropdown">
   <button class="dropbtn">Select an alloy system</button>
