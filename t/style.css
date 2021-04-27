@@ -1,6 +1,5 @@
 #stack {
     position:absolute;
-    max-width: 100%;
     }
 #stack > canvas {
     position:absolute;
@@ -60,3 +59,21 @@
 
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  /*height: 300px;*/ /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+* {
+  box-sizing: border-box;
+}
