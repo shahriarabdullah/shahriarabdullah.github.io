@@ -22,11 +22,13 @@ var img_width,img_height;
 var temp_low=50,temp_high=350,scale_temp;
 var ratio=1,lgd=0,lgd_start=0,lgd_end=2;
 
+var img_load=0;
+
 var ms_rad=can_ms_top.height/2;
 var area=Math.PI*Math.pow(ms_rad,2);
 var area_grain=Math.PI*Math.pow(8,2);
 
-var d_phase, d_prcnt, d_comp, d_temp="",d_iso="",d_dof,d_p;
+var d_phase, d_prcnt, d_comp, d_temp="",d_iso="",d_dof,d_p,d_alloy_comp;
 var comp_unit=[" wt% Sn","wt% Ni","wt% Ag"];
 var comp_unit_i=0;
 //Resizing the canvas
@@ -86,6 +88,7 @@ function load_image(canv,canv_ctx,img){ //Function for loading image to desired 
 	var w=window.innerWidth;
 	canv_ctx.drawImage(img,0,0,img_width,img_height); //Resizing the image to fit the canvas
 	var imgData = ctx.getImageData(0, 0, canv.width, canv.height);
+	img_load=img_load+1;
     //var data = imgData.data;
 }
 
@@ -118,6 +121,8 @@ var isothermal_reactions={
 	"0,162,232":"Liq ⇌ Pb+Sn"
 };
 
+var eutectic_comp=[62];
+
 //Function for getting mouse position
 function getMousePos(canvas, evt) {
     var rect = canvas.getBoundingClientRect();
@@ -131,6 +136,9 @@ function getMousePos(canvas, evt) {
 //Click on canvas event
 canvas_drawing.addEventListener('click', function(evt) {
 
+	if(img_load==2){
+		
+	
 
     var mousePos = getMousePos(canvas_drawing, evt);
     var mousePos_msg = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
@@ -173,6 +181,11 @@ canvas_drawing.addEventListener('click', function(evt) {
 		d_temp=temp_high-d_temp;
 		d_temp=d_temp.toFixed(2);
 	}
+
+	//Finding alloy composition
+
+	d_alloy_comp=((mousePos.x-left_margin)*scale).toFixed(2);
+
 
 	//Checking phase type
 
@@ -252,7 +265,12 @@ canvas_drawing.addEventListener('click', function(evt) {
 			ms_loaded=1;
 		}
 
-		microstructure(left_phase_frac,torgb(phases[phase_col][1]),"black");
+		if(d_alloy_comp<eutectic_comp[comp_unit_i]){
+			microstructure(left_phase_frac,torgb(phases[phase_col][1]),"black");	
+		} else if(d_alloy_comp>eutectic_comp[comp_unit_i]){
+			microstructure(right_phase_frac,torgb(phases[phase_col][2]),"black");	
+		}
+		
 		} else{ //Two phase but not eutectic
 			//Draw two phase microstructure here
 			
@@ -290,13 +308,22 @@ canvas_drawing.addEventListener('click', function(evt) {
 		d_iso="Eutectic | Eutectic Reaction: <b>"+isothermal_reactions[str_rgb]+"</b>";
 		d_p=3;
 		show_data();
-		
+		ctx_ms_top.clearRect(0,0,can_ms_top.width/2,can_ms_top.height);
+		if(ms_loaded==0){ //Loading lamella image
+			
+			img_ms_lamella.src="https://i.ibb.co/NCQvnV3/lamellae-pbsn.png";
+			ms_loaded=1;
+		}
 		console.log("Eutectic Point");
 		
 	}
 if(lgd==0){
 	legend();	
 }
+
+} else { //if image loading not completed
+		alert("Image loading not completed. Please wait a while...");
+	}
 
   }, false);
 
@@ -404,8 +431,8 @@ function reposition_ms(){
 	e_can_ms=document.getElementById('can_ms');
 	e_can_ms_top=document.getElementById('can_ms_top');
 
-	e_can_ms.style.top=img_height+10;
-	e_can_ms_top.style.top=img_height+10;
+	e_can_ms.style.top=img_height+25;
+	e_can_ms_top.style.top=img_height+25;
 
 	e_can_ms.style.left=0;
 	e_can_ms_top.style.left=0;
@@ -418,13 +445,25 @@ function draw(){
 
 function show_data(){
 	d_dof=2-d_p+1;
+	document.getElementById("alloy_comp").innerHTML="Alloy composition: <b>"+d_alloy_comp+" "+comp_unit[comp_unit_i]+"</b>";
 	document.getElementById("phase_name").innerHTML="Phase: <b>"+d_phase+"</b>";
 	document.getElementById("phase_frac").innerHTML="Phase percentage: <b>"+d_prcnt+"</b>";
 	document.getElementById("phase_comp").innerHTML="Phase composition: "+"<b>"+d_comp+"</b> ("+comp_unit[comp_unit_i]+")";
-	document.getElementById("isothermal").innerHTML="Isothermal point: "+d_iso;
+	document.getElementById("isothermal").innerHTML="Isothermal point: <b>"+d_iso+"</b>";
 	document.getElementById("temp").innerHTML="Temperature: <b>"+d_temp+"°C<b>"
 	document.getElementById("dof").innerHTML="Degree of freedom: <b>"+d_dof+"</b> | C=2 P="+d_p;
 }
+
+function clear_data(){
+	document.getElementById("phase_name").innerHTML="Phase:";
+	document.getElementById("phase_frac").innerHTML="Phase percentage:";
+	document.getElementById("phase_comp").innerHTML="Phase composition:";
+	document.getElementById("isothermal").innerHTML="Isothermal point:";
+	document.getElementById("temp").innerHTML="Temperature:";
+	document.getElementById("dof").innerHTML="Degree of freedom:";
+	document.getElementById("alloy_comp").innerHTML="Alloy composition:";
+}
+
 
 function legend(){
 	var y=20;
@@ -452,6 +491,8 @@ function set_param(selection){
 	ctx_ms.clearRect(0,0,400,400);
 	scale=0;
 	lgd=0;
+	img_load=0;
+	clear_data();
 	if(selection=="CuNi"){
 		img_top_phase.src="https://i.ibb.co/Qjg43T0/cuni-top.png";
 		img_back_phase.src="https://i.ibb.co/fD5k494/cuni.png";
