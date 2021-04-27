@@ -1,15 +1,21 @@
 <html>
 <head><title>Interactive Phase Diagram | Shahriar</title>
 	<link rel="stylesheet" href="style.css">
+	<meta name="viewport" content="width=device-width, initial-scale=0.5"/>
 </head>
 
 <body>
 
-<div>
-	<p align="center" style="font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 30px;">INTERACTIVE PHASE DIAGRAM</p>
+<div style="font-family: Verdana, Arial, Helvetica, sans-serif;">
+	<p style="font-size: 30px;">INTERACTIVE PHASE DIAGRAM</p>
+	<p id="alloy_comp">Alloy composition:</p>
 	<p id="phase_name">Phase:</p>
 	<p id="phase_frac">Phase percentage:</p>
 	<p id="phase_comp">Phase composition:</p>
+	<p id="dof">Degree of freedom:</p>
+	<p id="isothermal">Isothermal point:</p>
+	<p id="temp">Temperature:</p>
+	<button onclick="microstructure();">Draw</button>
 	<hr>
 </div>
 
@@ -17,9 +23,10 @@
  <div class="dropdown">
   <button class="dropbtn">Select an alloy system</button>
   <div class="dropdown-content">
-    <a href="#">Cu-Ni</a>
-    <a href="#">Pb-Sn</a>
-    <a href="#">Fe-Fe3C</a>
+    <a onclick="set_param('CuNi');">Cu-Ni</a>
+    <a onclick="set_param('PbSn');">Pb-Sn</a>
+    <a onclick="set_param('Fe3C');">Fe-Fe3C</a>
+    <a onclick="set_param('PtAg');">Pt-Ag</a>
   </div>
 </div> 
 
@@ -32,8 +39,8 @@
 </div>
 
 <div id="ms_stack">
-<canvas id="can_ms" width="400" height="400">Your browser isn't supported!</canvas>
-<canvas id="can_ms_top" width="400" height="400">Your browser isnt' supported!</canvas>
+<canvas id="can_ms" width="400" height="200">Your browser isn't supported!</canvas>
+<canvas id="can_ms_top" width="400" height="200">Your browser isnt' supported!</canvas>
 </div>
 
 
