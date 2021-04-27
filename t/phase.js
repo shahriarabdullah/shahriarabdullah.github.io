@@ -95,21 +95,22 @@ function load_image(canv,canv_ctx,img){ //Function for loading image to desired 
 //Image loading done
 
 var phases={
-    "208,239,114":["Pb+Liq.","245,58,133","239,228,176","L",2], //[Phase,Back phase col,grain_phase,left/right,left phase]
-    "200,191,231":["Liq.+Sn","245,58,133","112,146,190","R",1],
-    "181,230,29":["Pb+Sn","239,228,176","112,146,190","L",1],
-    "239,228,176":"Pb",
-    "112,146,190":"Sn",
+    "208,239,114":["α (Pb)+Liq.","245,58,133","239,228,176","L",2], //[Phase,Back phase col,grain_phase,left/right,left phase]
+    "200,191,231":["Liq.+β (Sn)","245,58,133","112,146,190","R",1],
+    "181,230,29":["α (Pb)+β (Sn)","239,228,176","112,146,190","L",1],
+    "239,228,176":"α (Pb)",
+    "112,146,190":"β (Sn)",
     "245,58,133":"Liq.",
-    "243,243,69":"Cu",
-    "187,202,206":"Ni",
-    "188,208,49":["Cu+Ni","243,243,69","187,202,206","R",1],
-    "104,242,115":"Pt",
-    "203,247,100":"Ag",
+    "243,243,69":"α (Cu)",
+    "187,202,206":"β (Ni)",
+    "188,208,49":["α (Cu)+β (Ni)","243,243,69","187,202,206","R",1],
+    "104,242,115":"α (Pt)",
+    "203,247,100":"β (Ag)",
     "56,112,141":"Liq.",
-    "233,114,114":["Liq.+Pt","56,112,141","104,242,115","L",2],
-    "248,37,74":["Pt+Ag","104,242,115","203,247,100","L",1],
-    "223,123,221":["Liq.+Ag","56,112,141","203,247,100","L",2]
+    "233,114,114":["Liq.+α (Pt)","56,112,141","104,242,115","L",2],
+    "248,37,74":["α (Pt)+β (Ag)","104,242,115","203,247,100","L",1],
+    "223,123,221":["Liq.+β (Ag)","56,112,141","203,247,100","L",2],
+    "0,162,232":"Liq.+α (Pb)+β (Sn)"
 };
 
 var lamella=["181,230,29"];
@@ -118,7 +119,7 @@ var two_phasez=["208,239,114","200,191,231","181,230,29","188,208,49","233,114,1
 var single_phasez=["239,228,176","112,146,190","245,58,133","243,243,69","187,202,206","56,112,141","104,242,115","203,247,100"];
 var eutectic=["0,162,232"];
 var isothermal_reactions={
-	"0,162,232":"Liq ⇌ Pb+Sn"
+	"0,162,232":"Liq ⇌ α (Pb)+β (Sn)"
 };
 
 var eutectic_comp=[62];
@@ -136,10 +137,7 @@ function getMousePos(canvas, evt) {
 //Click on canvas event
 canvas_drawing.addEventListener('click', function(evt) {
 
-	if(img_load==2){
 		
-	
-
     var mousePos = getMousePos(canvas_drawing, evt);
     var mousePos_msg = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
 
@@ -158,6 +156,10 @@ canvas_drawing.addEventListener('click', function(evt) {
     if(scale==0){
 		scaling();
 	}
+
+	//Checking if clicked outside the diagram
+	if(mousePos.x>left_margin && mousePos.x<right_margin && mousePos.y>top_margin && mousePos.y<bottom_margin){
+
 
     //Marking clicked location
 
@@ -303,7 +305,7 @@ canvas_drawing.addEventListener('click', function(evt) {
 		d_p=1;		
 		show_data();
 	} else if(eutectic.includes(str_rgb)){
-		d_phase="Liq.+Pb+Sn";
+		d_phase=phases[str_rgb];
 		d_comp=((mousePos.x-left_margin)*scale).toFixed(2);
 		d_iso="Eutectic | Eutectic Reaction: <b>"+isothermal_reactions[str_rgb]+"</b>";
 		d_p=3;
@@ -316,14 +318,21 @@ canvas_drawing.addEventListener('click', function(evt) {
 		}
 		console.log("Eutectic Point");
 		
+	} else { //Maybe clicked on phase boundary
+		if(rgb)
+		console.log("Maybe you've clicked on phase boundary");
 	}
 if(lgd==0){
 	legend();	
 }
 
-} else { //if image loading not completed
-		alert("Image loading not completed. Please wait a while...");
+} else { //Clicked outside diagram
+	if(pxl[0]<100 && pxl[1]<100 && pxl[2]<100){
+		console.log("Clicked on border!");
+	} else {
+		consol.log("Maybe you've clicked on phase boundary");
 	}
+}
 
   }, false);
 
