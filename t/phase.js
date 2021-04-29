@@ -19,7 +19,7 @@ var ctx_ms_top=can_ms_top.getContext('2d');
 var scale=0,left_margin=0,right_margin=0,top_margin=0,left_margin=0,ms_loaded=0;
 var is_isothermal="No";
 var img_width,img_height;
-var temp_low=50,temp_high=350,scale_temp;
+var temp_low=50,temp_high=350,scale_temp,rb=100,lb=0;
 var ratio=1,lgd=0,lgd_start=0,lgd_end=2;
 
 var img_load=0;
@@ -28,8 +28,8 @@ var ms_rad=can_ms_top.height/2;
 var area=Math.PI*Math.pow(ms_rad,2);
 var area_grain=Math.PI*Math.pow(8,2);
 
-var d_phase, d_prcnt, d_comp, d_temp="",d_iso="",d_dof,d_p,d_alloy_comp;
-var comp_unit=[" wt% Sn","wt% Ni","wt% Ag"];
+var d_phase, d_prcnt, d_comp, d_temp="",d_iso="",d_dof,d_p,d_alloy_comp,d_comm;
+var comp_unit=[" wt% Sn","wt% Ni","wt% Ag","wt% C"];
 var comp_unit_i=0;
 //Resizing the canvas
 function resize_canv(){
@@ -76,7 +76,8 @@ img_top_phase.src="https://i.ibb.co/zPjP5fm/pbsn-top.png";
 img_back_phase.onload=function(){ //Loading background image
 	load_image(canvas,ctx,img_back_phase);
 }
-img_back_phase.src="https://i.ibb.co/S35T8QQ/pbsn.png";
+//img_back_phase.src="https://i.ibb.co/S35T8QQ/pbsn.png";
+img_back_phase.src="https://i.ibb.co/HnDQ7Wf/pbsn.png";
 
 img_ms_lamella.onload=function(){ //Microstructure lamella
 	ctx_ms.drawImage(img_ms_lamella,0,0,can_ms.height,can_ms.height);
@@ -110,19 +111,42 @@ var phases={
     "233,114,114":["Liq.+α (Pt)","56,112,141","104,242,115","L",2],
     "248,37,74":["α (Pt)+β (Ag)","104,242,115","203,247,100","L",1],
     "223,123,221":["Liq.+β (Ag)","56,112,141","203,247,100","L",2],
-    "0,162,232":"Liq.+α (Pb)+β (Sn)"
+    "0,162,232":"Liq.+α (Pb)+β (Sn)",
+    "28,28,28": "α Fe (Ferrite)",
+    "128,0,64":"γ Fe (Austenite)",
+    "81,47,73":"𝛿 Fe",
+    "145,117,60":"Liq.",
+    "192,192,192":"Fe3C (IM)",
+    "81,163,41":["γ Fe+Liq.","145,117,60","128,0,64","L",2],
+    "166,143,38":["Liq+Fe<sub>3</sub>C (Cementite)","145,117,60","192,192,192","R",1],
+    "21,113,123":["𝛿 Fe+γ Fe","81,47,73","128,0,64","L",1],
+    "51,94,78":["𝛿 Fe+Liq.","145,117,60","81,47,73","L",1],
+    "39,165,86":["γ Fe+Fe<sub>3</sub>C","128,0,64","192,192,192","R",2],
+    "165,65,39":["α Fe+Fe<sub>3</sub>C","28,28,28","192,192,192","R",2]
+
 };
 
-var lamella=["181,230,29"];
+var lamella=["181,230,29","165,65,39"];
 
-var two_phasez=["208,239,114","200,191,231","181,230,29","188,208,49","233,114,114","248,37,74","223,123,221"];
-var single_phasez=["239,228,176","112,146,190","245,58,133","243,243,69","187,202,206","56,112,141","104,242,115","203,247,100"];
-var eutectic=["0,162,232"];
+var two_phasez=["208,239,114","200,191,231","181,230,29","188,208,49","233,114,114","248,37,74","223,123,221","81,163,41","166,143,38","21,113,123","51,94,78","39,165,86","165,65,39"];
+var single_phasez=["239,228,176","112,146,190","245,58,133","243,243,69","187,202,206","56,112,141","104,242,115","203,247,100","28,28,28","128,0,64","81,47,73","145,117,60","192,192,192"];
+var eutectic=["0,162,232","89,99,185"];
 var isothermal_reactions={
 	"0,162,232":"Liq ⇌ α (Pb)+β (Sn)"
 };
 
-var eutectic_comp=[62];
+var isotherm_lines={
+	"0,0,255":"Eutectic isothermal line",
+	"255,0,0":"Peritectic isothermal line",
+	"62,70,147":"Eutectoid isothermal line",
+	"47,54,102":"Peritectic isothermal line"
+};
+
+var lamella_src=["https://i.ibb.co/NCQvnV3/lamellae-pbsn.png","","","https://i.ibb.co/9ZGHnLT/lamellae-fe3c.png"];
+
+var isotherm_cols=["0,0,255","255,0,0","62,70,147","47,54,102"];
+
+var eutectic_comp=[62,0,0,0.77];
 
 //Function for getting mouse position
 function getMousePos(canvas, evt) {
@@ -141,14 +165,15 @@ canvas_drawing.addEventListener('click', function(evt) {
     var mousePos = getMousePos(canvas_drawing, evt);
     var mousePos_msg = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
 
-    var pxl=ctx.getImageData(mousePos.x,mousePos.y,1,1).data; //Getting pixel data
-    var rgb=[pxl[0],pxl[1],pxl[2]];
-    var str_rgb=pxl[0]+","+pxl[1]+","+pxl[2];
+    //var pxl=ctx.getImageData(mousePos.x,mousePos.y,1,1).data; //Getting pixel data
+    //var rgb=[pxl[0],pxl[1],pxl[2]];
+    //var str_rgb=pxl[0]+","+pxl[1]+","+pxl[2];
+    var str_rgb=pixel_data(mousePos.x,mousePos.y);
 
     var phase_col=str_rgb;
 
 
-    console.log("The pixel at "+ mousePos_msg + " is "+rgb);
+    console.log("The pixel at "+ mousePos_msg + " is "+str_rgb);
 
     ctxDraw.clearRect(0,0,can_drawing.width,can_drawing.height); //Clearing top canvas before drawing
 
@@ -263,7 +288,8 @@ canvas_drawing.addEventListener('click', function(evt) {
 			ctx_ms_top.clearRect(0,0,can_ms_top.width/2,can_ms_top.height);
 			if(ms_loaded==0){ //Loading lamella image
 			
-			img_ms_lamella.src="https://i.ibb.co/NCQvnV3/lamellae-pbsn.png";
+			//img_ms_lamella.src="https://i.ibb.co/NCQvnV3/lamellae-pbsn.png";
+			img_ms_lamella.src=lamella_src[comp_unit_i];
 			ms_loaded=1;
 		}
 
@@ -290,7 +316,7 @@ canvas_drawing.addEventListener('click', function(evt) {
 			//ms_loaded=0;
 		}
 	d_p=2;
-	show_data();
+	
 	//is_isothermal="No";
 
 	} else if(single_phasez.includes(str_rgb)) { //Single phase zone
@@ -303,13 +329,13 @@ canvas_drawing.addEventListener('click', function(evt) {
 		d_comp=((mousePos.x-left_margin)*scale).toFixed(2);
 
 		d_p=1;		
-		show_data();
+		
 	} else if(eutectic.includes(str_rgb)){
 		d_phase=phases[str_rgb];
 		d_comp=((mousePos.x-left_margin)*scale).toFixed(2);
 		d_iso="Eutectic | Eutectic Reaction: <b>"+isothermal_reactions[str_rgb]+"</b>";
 		d_p=3;
-		show_data();
+		
 		ctx_ms_top.clearRect(0,0,can_ms_top.width/2,can_ms_top.height);
 		if(ms_loaded==0){ //Loading lamella image
 			
@@ -318,22 +344,37 @@ canvas_drawing.addEventListener('click', function(evt) {
 		}
 		console.log("Eutectic Point");
 		
-	} else { //Maybe clicked on phase boundary
-		if(rgb)
-		console.log("Maybe you've clicked on phase boundary");
+	
+	} else { //No phase found
+		
+		clear_data_var();
+		if(isotherm_cols.includes(str_rgb)){ //Clicked on isothermal line
+			d_phase=isotherm_lines[str_rgb];
+			
+			var u=pixel_data(mousePos.x,mousePos.y-5);
+			var d=pixel_data(mousePos.x,mousePos.y+5);
+		} else { //Checking if clicked on other phase boundary
+			var u=pixel_data(mousePos.x+20,mousePos.y);
+			var d=pixel_data(mousePos.x-20,mousePos.y);
+		}
+		if(phases[d]!=undefined && phases[u]!=undefined){
+			d_comm="Phase bounadry between "+phases[u][0]+" and "+phases[d][0];
+			d_p=2;
+		}
 	}
+
+
 if(lgd==0){
 	legend();	
 }
 
-} else { //Clicked outside diagram
-	if(pxl[0]<100 && pxl[1]<100 && pxl[2]<100){
-		console.log("Clicked on border!");
-	} else {
-		consol.log("Maybe you've clicked on phase boundary");
-	}
-}
 
+
+} else { //Clicked outside diagram
+	clear_data_var();
+	d_comm="Opps! No phase out there..."
+}
+show_data();
   }, false);
 
 function point_circle(context,x,y,rad,stroke_color,fill_color){
@@ -345,6 +386,14 @@ function point_circle(context,x,y,rad,stroke_color,fill_color){
     context.fill();
     context.stroke();
   
+}
+
+function pixel_data(x,y){
+	var pxl=ctx.getImageData(x,y,1,1).data; //Getting pixel data
+    //var rgb=[pxl[0],pxl[1],pxl[2]];
+    var str_rgb=pxl[0]+","+pxl[1]+","+pxl[2];
+    return str_rgb;
+
 }
 
 function scaling(){
@@ -373,7 +422,7 @@ function scaling(){
 		}
 		right_margin=nx;
 
-	scale=100/(right_margin-left_margin); //Scale for x axis
+	scale=(rb-lb)/(right_margin-left_margin); //Scale for x axis
 
 	str_rgb="";
 	nx=canvas.width/2;
@@ -452,6 +501,21 @@ function draw(){
 	alert('hello');
 }
 
+function clear_data_var(s){
+
+	d_iso="";
+	d_comm="";
+	d_prcnt="";
+	d_dof="";
+	d_phase="";
+	if(s!=null){
+		d_alloy_comp="";
+		d_temp="";	
+	}
+	
+	
+}
+
 function show_data(){
 	d_dof=2-d_p+1;
 	document.getElementById("alloy_comp").innerHTML="Alloy composition: <b>"+d_alloy_comp+" "+comp_unit[comp_unit_i]+"</b>";
@@ -461,6 +525,7 @@ function show_data(){
 	document.getElementById("isothermal").innerHTML="Isothermal point: <b>"+d_iso+"</b>";
 	document.getElementById("temp").innerHTML="Temperature: <b>"+d_temp+"°C<b>"
 	document.getElementById("dof").innerHTML="Degree of freedom: <b>"+d_dof+"</b> | C=2 P="+d_p;
+	document.getElementById("comments").innerHTML="Comment: <b>"+d_comm+"</b>";
 }
 
 function clear_data(){
@@ -479,8 +544,8 @@ function legend(){
 	var c,i;
 	for	(i=lgd_start;i<=lgd_end;i++){
 		c=torgb(single_phasez[i]);
-		point_circle(ctx_ms_top,280,y+(40*(i-lgd_start)),10,c,c);
-		text(ctx_ms_top,300,y+(40*(i-lgd_start))+5,phases[single_phasez[i]]);
+		point_circle(ctx_ms_top,270,y+(40*(i-lgd_start)),10,c,c);
+		text(ctx_ms_top,290,y+(40*(i-lgd_start))+5,phases[single_phasez[i]]);
 	}
 
 	lgd=1;
@@ -501,6 +566,8 @@ function set_param(selection){
 	scale=0;
 	lgd=0;
 	img_load=0;
+	rb=100;
+	lb=0;
 	clear_data();
 	if(selection=="CuNi"){
 		img_top_phase.src="https://i.ibb.co/Qjg43T0/cuni-top.png";
@@ -511,17 +578,25 @@ function set_param(selection){
 		lgd_end=4;
 	} else if(selection=="PbSn"){
 		img_top_phase.src="https://i.ibb.co/zPjP5fm/pbsn-top.png";
-		img_back_phase.src="https://i.ibb.co/S35T8QQ/pbsn.png";
+		//img_back_phase.src="https://i.ibb.co/S35T8QQ/pbsn.png";
+		img_back_phase.src="https://i.ibb.co/HnDQ7Wf/pbsn.png";
 		temp_high=350; temp_low=50;
 		comp_unit_i=0;
 		lgd_start=0;
 		lgd_end=2;
-	} else if(selection="PtAg"){
+	} else if(selection=="PtAg"){
 		img_top_phase.src="https://i.ibb.co/WGhdX0T/ptag-top.png";
 		img_back_phase.src="https://i.ibb.co/gj6rdp1/ptag.png";
 		temp_high=2000; temp_low=400;
 		comp_unit_i=2;
 		lgd_start=5;
 		lgd_end=7;
+	} else if(selection=="Fe3C"){
+		img_top_phase.src="https://i.ibb.co/Y302RHC/fe3c-top.png";
+		img_back_phase.src="https://i.ibb.co/Xbn7JbX/fe3c.png";
+		temp_low=400; temp_high=1600;
+		comp_unit_i=3;
+		rb=6.7; lb=0;
+		lgd_start=8; lgd_end=12;
 	}
 }
