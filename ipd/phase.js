@@ -113,7 +113,7 @@ var init_data={ //[top src, back src, temp low, temp high, comp unit, lgd start,
 	"CuNi":["https://i.ibb.co/Qjg43T0/cuni-top.png","https://i.ibb.co/fD5k494/cuni.png",1000,1600,1,3,4,0,100],
 	"PbSn":["https://i.ibb.co/zPjP5fm/pbsn-top.png","https://i.ibb.co/HnDQ7Wf/pbsn.png",50,350,0,0,2,0,100],
 	"PtAg":["https://shahriarabdullah.github.io/ipd/imgs/ptag_top.png"/*https://i.ibb.co/WGhdX0T/ptag-top.png"*/,"https://i.ibb.co/gj6rdp1/ptag.png",400,2000,2,5,7,0,100],
-	"Fe3C":["https://shahriarabdullah.github.io/ipd/imgs/fe3c_top.png"/*https://i.ibb.co/Y302RHC/fe3c-top.png"*/,"https://i.ibb.co/4VJnFqg/fe3c.png",400,1600,3,8,12,0,6.7]
+	"Fe3C":["https://shahriarabdullah.github.io/ipd/imgs/rsz_fe3c_top.png"/*https://i.ibb.co/Y302RHC/fe3c-top.png"*/,"https://i.ibb.co/4VJnFqg/fe3c.png",400,1600,3,8,12,0,6.7]
 };
 
 var phases={ //[Phase,Back phase col,grain_phase,left/right,left phase]
