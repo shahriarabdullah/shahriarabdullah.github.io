@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<script src='https://cdn.plot.ly/plotly-2.16.1.min.js'></script>
+<head>
+	<title>XRD Viewer | Shahriar</title>
+</head>
+
+<body>
+	<h2 align="center"> Online XRD Peak Viewer </h2>
+	<h3 align="center">Abdullah Shahriar</h3>
+	<input type="file" name="inputfile"
+			id="inputfile">
+	<br>
+	<div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
+	<p id="out"></p>
+
+	<pre id="output"></pre>
+	
+	<script type="text/javascript">
+		document.getElementById('inputfile')
+			.addEventListener('change', function() {
+			
+			//var txt;
+			var fr=new FileReader();
+
+			function linspace(startValue, stopValue, cardinality) {
+  			var arr = [];
+  			var step = (stopValue - startValue) / (cardinality - 1);
+  			for (var i = 0; i < cardinality; i++) {
+    		arr.push(startValue + (step * i));
+  			}
+  			return arr;
+			}
+
+			fr.onload=function(){
+				//document.getElementById('output').textContent=fr.result;
+				
+				var txt = fr.result;
+				var parser, xmlDoc;
+
+				parser = new DOMParser();
+				xmlDoc = parser.parseFromString(txt,"text/xml");
+
+				var start_angle,end_angle,counts;
+				start_angle=xmlDoc.getElementsByTagName("startPosition")[0].childNodes[0].nodeValue;
+				start_angle=parseFloat(start_angle);
+				end_angle=xmlDoc.getElementsByTagName("endPosition")[0].childNodes[0].nodeValue;
+				end_angle=parseFloat(end_angle);
+				counts=xmlDoc.getElementsByTagName("intensities")[0].childNodes[0].nodeValue;
+
+				//document.getElementById("out").innerHTML =	counts;
+				const y_arr=counts.split(" ");
+				var y_arr_num = y_arr.map(Number);
+				var xx=linspace(start_angle,end_angle,y_arr_num.length);
+				
+				var trace1 = {
+				 x: xx,
+				 y: y_arr_num,
+				 mode: 'lines',
+				 type: 'scatter'
+				};
+
+				var data = [trace1];
+
+				Plotly.newPlot('myDiv', data);
+
+			}
+			
+			fr.readAsText(this.files[0]);
+			
+		})
+	</script>
+</body>
+
+</html>
