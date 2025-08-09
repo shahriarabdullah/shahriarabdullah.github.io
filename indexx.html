@@ -5,32 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Miah Abdullah Sahriar — Research & Publications</title>
   <meta name="description" content="Ph.D. student in Chemical Engineering & Materials Science at the University of Minnesota. Research, publications, skills, and contact." />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%237A0019'/%3E%3Cpath d='M20 60 C40 10, 60 10, 80 60' stroke='%23FFCC33' stroke-width='6' fill='none'/%3E%3Ccircle cx='50' cy='50' r='6' fill='white'/%3E%3C/svg%3E" />
   <style>
-    /* ---------- Design Tokens ---------- */
     :root{
       --bg: #ffffff;
       --text: #121212;
       --muted: #5b5b5b;
-      --brand: #7A0019; /* UMN maroon */
-      --brand-2: #FFCC33; /* UMN gold */
+      --brand: #7A0019;
+      --brand-2: #FFCC33;
       --card: #f7f7f8;
       --border: #e6e6e8;
       --shadow: 0 10px 30px rgba(0,0,0,.06);
       --radius: 18px;
       --maxw: 1100px;
     }
-    @media (prefers-color-scheme: dark){
-      :root{
-        --bg: #0f0f12;
-        --text: #f2f2f5;
-        --muted: #b4b4bb;
-        --card: #17171b;
-        --border: #26262b;
-        --shadow: 0 8px 24px rgba(0,0,0,.35);
-      }
-    }
-    .dark{
+    :root.dark{
       --bg: #0f0f12;
       --text: #f2f2f5;
       --muted: #b4b4bb;
@@ -38,94 +26,62 @@
       --border: #26262b;
       --shadow: 0 8px 24px rgba(0,0,0,.35);
     }
-
-    /* ---------- Base ---------- */
-    html,body{height:100%}
+    :root.dark{
+      --bg: #0f0f12;
+      --text: #f2f2f5;
+      --muted: #b4b4bb;
+      --card: #17171b;
+      --border: #26262b;
+      --shadow: 0 8px 24px rgba(0,0,0,.35);
+    }
     body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
+      margin:0; font-family: ui-sans-serif, system-ui; background: var(--bg); color: var(--text);
     }
     a{color: inherit; text-decoration: none}
-    img{max-width:100%; display:block}
-    .container{max-width: var(--maxw); margin-inline: auto; padding: 0 20px}
+    .container{max-width: var(--maxw); margin:auto; padding:0 20px}
     .btn{display:inline-block; padding:12px 18px; border-radius: 999px; border:1px solid var(--border); background: var(--text); color: var(--bg); box-shadow: var(--shadow); font-weight:600}
     .btn.alt{background: transparent; color: var(--text)}
-    .badge{display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border-radius: 999px; border:1px solid var(--border); background: var(--card); font-size:.9rem}
     .chip{display:inline-block; padding:6px 10px; border-radius:999px; background:var(--card); border:1px solid var(--border); font-size:.85rem}
     .card{background: var(--card); border:1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow)}
     .muted{color: var(--muted)}
 
-    /* ---------- Header / Nav ---------- */
-    header{position:sticky; top:0; z-index:50; backdrop-filter: saturate(160%) blur(10px); background: color-mix(in srgb, var(--bg) 80%, transparent)}
-    .nav{display:flex; align-items:center; justify-content:space-between; gap:18px; padding:14px 0}
-    .brand{display:flex; align-items:center; gap:12px}
-    .brand .logo{width:34px; height:34px; border-radius:50%; outline:2px solid var(--brand-2); outline-offset:2px}
-    .brand h1{font-size:1.05rem; margin:0; line-height:1.1}
+    header{position:sticky; top:0; background: var(--bg); z-index:50;}
+    .nav{display:flex; justify-content:space-between; align-items:center; padding:14px 0}
+    .brand h1{margin:0; font-size:1.4rem}
+    .brand .subtitle{font-size:0.8rem; display:block; color:var(--muted)}
     nav ul{display:flex; gap:14px; list-style:none; margin:0; padding:0}
-    nav a{padding:8px 12px; border-radius:10px; border:1px solid transparent}
-    nav a:hover{border-color: var(--border); background: var(--card)}
-    .nav-cta{display:flex; align-items:center; gap:10px}
-    .theme-toggle, .menu-toggle{border:1px solid var(--border); background:var(--card); border-radius:12px; padding:8px; cursor:pointer}
-    .menu-toggle{display:none}
+    nav a{padding:8px 12px; border-radius:10px; border:1px solid transparent; transition:all 0.2s ease}
+    nav a:hover{border-color: var(--brand); background: linear-gradient(90deg,var(--brand),var(--brand-2)); color:white; box-shadow: var(--shadow); transform: translateY(-1px)}
+    .theme-toggle{border:1px solid var(--border); background:var(--card); border-radius:12px; padding:8px; cursor:pointer; margin-left:10px; display:inline-flex; align-items:center; justify-content:center; box-shadow: var(--shadow)}
+    .theme-toggle:hover{background:color-mix(in srgb, var(--card) 70%, var(--brand-2));}
+    nav a{padding:8px 12px; border-radius:10px; border:1px solid transparent; transition:all 0.3s ease}
+    nav a:hover{border-color: var(--brand); background: linear-gradient(90deg,var(--brand),var(--brand-2)); color:white; box-shadow: var(--shadow); transform: translateY(-1px)}
 
-    /* ---------- Hero ---------- */
     .hero{display:grid; grid-template-columns: 1.2fr .8fr; gap:32px; padding: 48px 0}
-    .hero .intro h2{font-size: clamp(1.8rem, 1.1rem + 2.8vw, 3rem); line-height:1.15; margin:.2em 0 .3em}
+    .hero .intro h2{font-size: clamp(1.8rem, 1.1rem + 2.8vw, 3rem)}
     .accent{background: linear-gradient(90deg, var(--brand), var(--brand-2)); -webkit-background-clip:text; background-clip:text; color:transparent}
     .quick{display:flex; gap:14px; flex-wrap:wrap; margin:18px 0 6px}
-    .hero .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:14px}
-    .portrait{align-self:center}
-    .portrait .frame{aspect-ratio:1/1; border-radius: 22px; overflow:hidden; border:1px solid var(--border)}
-    .portrait .frame .ph{width:100%; height:100%; display:grid; place-items:center; background: radial-gradient(120% 120% at 20% 10%, color-mix(in srgb, var(--brand) 18%, transparent), transparent),
-        linear-gradient(180deg, color-mix(in srgb, var(--card) 80%, transparent), transparent);
-    }
 
-    /* ---------- Highlight Blocks ---------- */
     .highlights{display:grid; grid-template-columns: repeat(3, 1fr); gap:18px}
-    .hi{padding:18px}
 
-    /* ---------- News ---------- */
-    .news{display:grid; grid-template-columns: repeat(3, 1fr); gap:18px}
-    .news .item{padding:18px}
-
-    /* ---------- Footer ---------- */
     footer{margin-top:50px; padding:28px 0; border-top:1px solid var(--border); font-size:.95rem}
-    .footer-grid{display:grid; grid-template-columns: 2fr 1fr 1fr; gap:18px}
-    .soc{display:flex; gap:10px}
-    .soc a{display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:12px; border:1px solid var(--border); background:var(--card)}
 
-    /* ---------- Responsive ---------- */
     @media (max-width: 900px){
-      .hero{grid-template-columns: 1fr; padding: 28px 0}
-      .highlights, .news{grid-template-columns: 1fr 1fr}
+      .hero{grid-template-columns: 1fr}
+      .highlights{grid-template-columns: 1fr 1fr}
     }
     @media (max-width: 640px){
-      nav ul{display:none}
-      .menu-toggle{display:inline-block}
-      .highlights, .news, .footer-grid{grid-template-columns: 1fr}
+      .highlights{grid-template-columns: 1fr}
     }
-
-    /* ---------- Mobile Menu ---------- */
-    .mobile-menu{display:none; position: fixed; inset: 60px 14px auto 14px; background: var(--card); border:1px solid var(--border); border-radius: 16px; padding:12px; box-shadow: var(--shadow)}
-    .mobile-menu.open{display:block}
-    .mobile-menu a{display:block; padding:12px; border-radius:12px}
-    .mobile-menu a:hover{background: var(--bg)}
   </style>
 </head>
 <body>
   <header>
     <div class="container nav">
       <div class="brand">
-        <img class="logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%237A0019'/%3E%3Cpath d='M20 60 C40 10, 60 10, 80 60' stroke='%23FFCC33' stroke-width='6' fill='none'/%3E%3Ccircle cx='50' cy='50' r='6' fill='white'/%3E%3C/svg%3E" alt="logo" />
-        <h1>
-          <span style="font-weight:700">Miah Abdullah Sahriar</span><br />
-          <span class="muted">Ph.D. Student • Chemical Engineering & Materials Science • UMN</span>
-        </h1>
+        <h1>Miah Abdullah Sahriar <span class="subtitle">Ph.D. Student • Chemical Engineering & Materials Science • UMN</span></h1>
       </div>
-      <nav aria-label="Primary">
+      <nav>
         <ul>
           <li><a href="index.html">Home</a></li>
           <li><a href="research.html">Research</a></li>
@@ -133,173 +89,69 @@
           <li><a href="skills.html">Skills & Tools</a></li>
           <li><a href="about.html">About</a></li>
           <li><a href="contact.html">Contact</a></li>
-          <li><a href="blog.html">Blog</a></li>
         </ul>
       </nav>
-      <div class="nav-cta">
-        <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle dark mode">
-          <!-- moon/sun icon -->
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="2"/></svg>
-        </button>
-        <a class="btn alt" href="assets/Miah_Abdullah_Sahriar_CV.pdf">Download CV</a>
-        <button class="menu-toggle" id="menuToggle" aria-label="Open menu">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-    </div>
-    <div class="mobile-menu container" id="mobileMenu" aria-label="Mobile menu">
-      <a href="index.html">Home</a>
-      <a href="research.html">Research</a>
-      <a href="publications.html">Publications</a>
-      <a href="skills.html">Skills & Tools</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-      <a href="blog.html">Blog</a>
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle dark mode">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="2"/></svg>
+      </button>
+      <button id="themeToggle" class="btn alt" style="padding:6px 12px; font-size:.85rem">Toggle Theme</button>
     </div>
   </header>
 
   <main>
-    <!-- Hero -->
     <section class="container hero">
       <div class="intro">
-        <span class="badge" aria-label="Title & focus">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M7 13c2.5-4 7.5-4 10 0" stroke="currentColor" stroke-width="2"/></svg>
-          Chemical Engineering & Materials Science, UMN
-        </span>
-        <h2>
-          I study <span class="accent">soft matter & polymer physics</span> with microfluidics and optical tweezers.
-        </h2>
-        <p class="muted">2nd-year Ph.D. student exploring how bacterial nucleoids behave as polymers — quantifying mechanics, transport, and structure via single-particle manipulation and image analysis.</p>
-        <div class="quick" aria-label="Quick stats">
+        <h2>I study <span class="accent">soft matter & polymer physics</span> with microfluidics and optical tweezers.</h2>
+        <p class="muted">Exploring how bacterial nucleoids behave as polymers — quantifying mechanics, transport, and structure via single-particle manipulation and image analysis.</p>
+        <div class="quick">
           <span class="chip">9 publications</span>
           <span class="chip">Microfluidics</span>
           <span class="chip">Optical Tweezers</span>
-          <span class="chip">Image Processing</span>
-          <span class="chip">Polymer Models (Rouse/Zimm/Reptation)</span>
-        </div>
-        <div class="cta">
-          <a class="btn" href="research.html">View Research</a>
-          <a class="btn alt" href="publications.html">See Publications</a>
-        </div>
-      </div>
-      <div class="portrait">
-        <div class="frame card">
-          <!-- Replace this placeholder with your headshot -->
-          <div class="ph">
-            <svg width="160" height="160" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="12" cy="8" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="currentColor" stroke-width="1.5"/></svg>
-          </div>
+          <span class="chip">Polymer Models</span>
         </div>
       </div>
     </section>
 
-    <!-- Highlights -->
-    <section class="container" aria-label="Highlights">
-      <div class="highlights">
-        <article class="card hi">
-          <h3>Current Focus</h3>
-          <p class="muted">Bacterial nucleoid mechanics inside microchannels using trapped microbeads as micro‑pistons to probe DNA softness and reorganization.</p>
-          <a href="research.html" class="btn alt">Learn more →</a>
-        </article>
-        <article class="card hi">
-          <h3>Featured Paper</h3>
-          <p class="muted">Linking solvent quality to nucleoid macrodomains through polymer physics.
-          </p>
-          <a href="publications.html" class="btn alt">Read the work →</a>
-        </article>
-        <article class="card hi">
-          <h3>Open to Collaboration</h3>
-          <p class="muted">Interested in soft matter, single‑molecule biophysics, or image analysis? Let’s talk research ideas or tooling.</p>
-          <a href="contact.html" class="btn alt">Get in touch →</a>
-        </article>
-      </div>
+    <section class="container highlights">
+      <article class="card" style="padding:18px">
+        <h3>Current Focus</h3>
+        <p class="muted">Bacterial nucleoid mechanics in microchannels using trapped microbeads to probe DNA softness and reorganization.</p>
+      </article>
+      <article class="card" style="padding:18px">
+        <h3>Featured Paper</h3>
+        <p class="muted">Linking solvent quality to nucleoid macrodomains through polymer physics.</p>
+      </article>
+      <article class="card" style="padding:18px">
+        <h3>Open Methods & Protocols</h3>
+        <p class="muted">Sharing CAD designs, lysis protocols, and analysis scripts to help the community replicate and build upon our work.</p>
+      </article>
     </section>
 
-    <!-- News / Updates -->
-    <section class="container" style="margin-top:28px" aria-label="Recent news">
-      <h3 style="margin: 8px 0 12px">Recent News</h3>
-      <div class="news">
-        <article class="card item">
-          <div class="muted" style="font-size:.85rem">Aug 2025</div>
-          <h4>Preprint out on nucleoid softening in confined flows</h4>
-          <p class="muted">We report single‑cell force–extension behavior in E. coli post‑lysis under variable ionic strength.</p>
-        </article>
-        <article class="card item">
-          <div class="muted" style="font-size:.85rem">Jul 2025</div>
-          <h4>Presented at APS DFD</h4>
-          <p class="muted">Shared our microfluidic tweezer platform for probing polymeric behavior of nucleoids.</p>
-        </article>
-        <article class="card item">
-          <div class="muted" style="font-size:.85rem">May 2025</div>
-          <h4>New microchannel design</h4>
-          <p class="muted">Released open CAD and protocols for rapid PDMS device iteration.</p>
-        </article>
-      </div>
+    <section class="container" style="margin-top:30px">
+      <blockquote style="font-style:italic; font-size:1.1rem; color:var(--muted); border-left:4px solid var(--brand); padding-left:14px">
+        “Good science is humility with sharp tools. Models are maps, not territories; a single careful experiment can redraw the whole landscape. Curiosity first; certainty, only when it has earned its keep.”
+      </blockquote>
     </section>
   </main>
 
-  <footer>
-    <div class="container footer-grid">
-      <div>
-        <strong>Miah Abdullah Sahriar</strong>
-        <p class="muted">Ph.D. Student • Chemical Engineering & Materials Science • University of Minnesota</p>
-        <div class="soc">
-          <a href="#" aria-label="Google Scholar" title="Google Scholar">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 3 2 12l10 9" stroke="currentColor" stroke-width="1.7"/><path d="M12 3v9l8 6" stroke="currentColor" stroke-width="1.7"/></svg>
-          </a>
-          <a href="#" aria-label="ORCID" title="ORCID">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.7"/><path d="M9 8v8" stroke="currentColor" stroke-width="1.7"/></svg>
-          </a>
-          <a href="#" aria-label="LinkedIn" title="LinkedIn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="4" width="5" height="16" stroke="currentColor" stroke-width="1.7"/><path d="M10 9h4a4 4 0 0 1 4 4v7h-5v-6.5a1.75 1.75 0 0 0-3.5 0V20H10V9Z" stroke="currentColor" stroke-width="1.7"/></svg>
-          </a>
-          <a href="#" aria-label="GitHub" title="GitHub">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.6c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 19 3.5 5.07 5.07 0 0 0 18.91 1S17.73.65 15 2.48a13.38 13.38 0 0 0-6 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 3.5 5.44 5.44 0 0 0 3.5 7.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" stroke="currentColor" stroke-width="1.7"/></svg>
-          </a>
-        </div>
-      </div>
-      <div>
-        <strong>Navigation</strong>
-        <div style="display:grid; gap:6px; margin-top:8px">
-          <a href="research.html" class="muted">Research</a>
-          <a href="publications.html" class="muted">Publications</a>
-          <a href="skills.html" class="muted">Skills & Tools</a>
-          <a href="about.html" class="muted">About</a>
-          <a href="contact.html" class="muted">Contact</a>
-        </div>
-      </div>
-      <div>
-        <strong>Downloads</strong>
-        <div style="display:grid; gap:6px; margin-top:8px">
-          <a href="assets/Miah_Abdullah_Sahriar_CV.pdf" class="muted">Curriculum Vitae (PDF)</a>
-          <a href="assets/bio.txt" class="muted">Short Bio</a>
-        </div>
-      </div>
-    </div>
-    <div class="container" style="margin-top:12px; display:flex; justify-content:space-between; gap:10px; align-items:center">
-      <span class="muted">© <span id="year"></span> Miah Abdullah Sahriar</span>
-      <span class="muted">Built with plain HTML/CSS • Hosted on GitHub Pages</span>
-    </div>
+  <footer class="container">
+    <p class="muted">© <span id="year"></span> Miah Abdullah Sahriar</p>
   </footer>
 
   <script>
-    // --- Persisted Theme Toggle ---
-    const root = document.documentElement;
+    // Year stamp
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Theme toggle (persists)
     const themeToggle = document.getElementById('themeToggle');
     const savedTheme = localStorage.getItem('theme');
-    if(savedTheme === 'dark') document.body.classList.add('dark');
-
+    if(savedTheme === 'dark'){
+      document.documentElement.classList.add('dark');
+    }
     themeToggle?.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
     });
-
-    // --- Mobile Menu ---
-    const menuToggle = document.getElementById('menuToggle');
-    const mobileMenu = document.getElementById('mobileMenu');
-    menuToggle?.addEventListener('click', () => mobileMenu.classList.toggle('open'));
-
-    // --- Year ---
-    document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
