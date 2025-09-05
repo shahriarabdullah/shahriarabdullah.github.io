@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Writing — Miah Abdullah Sahriar</title>
+  <style>
+    :root{
+      --bg:#ffffff;
+      --text:#1a1f2b;
+      --muted:#6b7280;
+      --link:#0f766e;
+      --card:#f8fafc;
+      --border:#e5e7eb;
+      --accent:#0ea5e9;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg:#0b0e14;
+        --text:#e6e6e6;
+        --muted:#a5adbd;
+        --link:#5eead4;
+        --card:#0f131b;
+        --border:#1f2937;
+        --accent:#38bdf8;
+      }
+    }
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";line-height:1.6;}
+    .wrap{max-width: 900px; margin: 28px auto; padding: 0 20px;}
+    header{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between;margin-bottom:24px}
+    .brand{display:flex;flex-direction:column}
+    .brand h1{font-size:1.6rem;margin:0;font-weight:700;letter-spacing:.2px}
+    .brand p{margin:2px 0 0 0;color:var(--muted);font-size:.95rem}
+    nav{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+    nav a{color:var(--muted);text-decoration:none;font-weight:500;padding:6px 10px;border-radius:10px}
+    nav a.active{color:var(--text);background:var(--card);border:1px solid var(--border)}
+    nav a:hover{color:var(--text)}
+    .cv{border:1px solid var(--border);padding:6px 10px;border-radius:10px;text-decoration:none;color:var(--text)}
+    .cv:hover{border-color:var(--text)}
+    .intro{margin: 8px 0 20px 0; color: var(--muted);font-size:1rem}
+    .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin:12px 0 20px 0}
+    .search{flex:1;min-width:200px;display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:8px 12px}
+    .search input{border:none;outline:none;background:transparent;color:var(--text);width:100%}
+    .tags{display:flex;flex-wrap:wrap;gap:8px}
+    .tag{font-size:.85rem;border:1px solid var(--border);padding:6px 10px;border-radius:999px;cursor:pointer;color:var(--muted);background:transparent}
+    .tag.active{color:var(--text);background:var(--card)}
+    .grid{display:grid;grid-template-columns:1fr;gap:14px}
+    @media(min-width:780px){ .grid{grid-template-columns:1fr 1fr} }
+    article{border:1px solid var(--border);background:var(--card);border-radius:16px;padding:16px;transition:transform .08s ease}
+    article:hover{transform:translateY(-1px)}
+    .meta{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:.88rem;margin:2px 0 10px 0}
+    .post-title{margin:0 0 6px 0;font-size:1.1rem;line-height:1.35}
+    .post-title a{color:var(--text);text-decoration:none}
+    .post-title a:hover{color:var(--accent)}
+    .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+    .chip{font-size:.78rem;border:1px solid var(--border);padding:4px 8px;border-radius:999px;color:var(--muted)}
+    footer{margin:28px 0;color:var(--muted);font-size:.9rem}
+    .empty{border:1px dashed var(--border);background:transparent}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- Header / Nav -->
+    <header>
+      <div class="brand">
+        <h1>Miah Abdullah Sahriar</h1>
+        <p>Ph.D. Student · Chemical Engineering & Materials Science · UMN</p>
+      </div>
+      <nav>
+        <a href="home.html">Projects</a>
+        <a href="writing.html" class="active">Writing</a>
+        <a href="publications.html">Publications</a>
+        <a href="about.html">About</a>
+        <a href="mailto:abdul332@umn.edu">Contact</a>
+        <a class="cv" href="cv.pdf">CV</a>
+      </nav>
+    </header>
+
+    <p class="intro">Essays, lab logs, notes—ideas in progress. Search or filter by tags.</p>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.2-4.2M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input id="q" type="search" placeholder="Search titles and summaries…" />
+      </div>
+      <div class="tags" id="tagbar">
+        <button class="tag active" data-tag="all">All</button>
+        <button class="tag" data-tag="optical-tweezers">Optical Tweezers</button>
+        <button class="tag" data-tag="microfluidics">Microfluidics</button>
+        <button class="tag" data-tag="polymer-physics">Polymer Physics</button>
+        <button class="tag" data-tag="lab-log">Lab Log</button>
+        <button class="tag" data-tag="essay">Essay</button>
+      </div>
+    </div>
+
+    <!-- Posts Grid -->
+    <section class="grid" id="posts">
+      <!-- EXAMPLE CARD 1 -->
+      <article data-tags="optical-tweezers,polymer-physics" data-title="Confined DNA isn’t a spring—until you push it" data-summary="Notes on force–extension behavior inside narrow channels and when Hooke shows up.">
+        <h3 class="post-title"><a href="writing/confined-dna.html">Confined DNA isn’t a spring—until you push it</a></h3>
+        <div class="meta">
+          <span>Aug 2025</span> · <span>~5 min read</span>
+        </div>
+        <p>When confinement, salt, and crowding compete, nucleoids act spring-like only beyond a threshold deformation. Where does that threshold come from?</p>
+        <div class="chips">
+          <span class="chip">Optical Tweezers</span>
+          <span class="chip">Polymer Physics</span>
+        </div>
+      </article>
+
+      <!-- EXAMPLE CARD 2 -->
+      <article data-tags="optical-tweezers,microfluidics,lab-log" data-title="Optical tweezers as micro-pistons" data-summary="A practical geometry for measuring softening under ionic steps.">
+        <h3 class="post-title"><a href="writing/optical-tweezer-piston.html">Optical tweezers as micro-pistons</a></h3>
+        <div class="meta">
+          <span>Jul 2025</span> · <span>notes</span>
+        </div>
+        <p>Trap-pushing against lysis-fronts in mother machines: a quick note on geometry, calibration, and avoiding photodamage.</p>
+        <div class="chips">
+          <span class="chip">Optical Tweezers</span>
+          <span class="chip">Microfluidics</span>
+          <span class="chip">Lab Log</span>
+        </div>
+      </article>
+
+      <!-- EXAMPLE CARD 3 -->
+      <article data-tags="polymer-physics,essay" data-title="What counts as 'temperature' in TTS?" data-summary="A short reflection on effective temperatures in cells.">
+        <h3 class="post-title"><a href="writing/what-is-temperature-tts.html">What counts as “temperature” in TTS?</a></h3>
+        <div class="meta">
+          <span>May 2025</span> · <span>lab log</span>
+        </div>
+        <p>Time–temperature superposition outside equilibrium—does it even make sense for active, crowded cytoplasm?</p>
+        <div class="chips">
+          <span class="chip">Polymer Physics</span>
+          <span class="chip">Essay</span>
+        </div>
+      </article>
+
+      <!-- PLACEHOLDER (remove when you add more) -->
+      <article class="empty" data-tags="essay" data-title="Add your new post" data-summary="How to add posts quickly.">
+        <h3 class="post-title"><a href="#">Add your new post</a></h3>
+        <div class="meta"><span>—</span></div>
+        <p>Duplicate any card block above, change the link, title, date, summary, chips, and the <code>data-*</code> attributes.</p>
+        <div class="chips"><span class="chip">Tip</span></div>
+      </article>
+    </section>
+
+    <footer>
+      © Miah Abdullah Sahriar · Built with plain HTML/CSS · <a href="home.html" style="color:var(--link);text-decoration:none;">Back to home</a>
+    </footer>
+  </div>
+
+  <script>
+    // --- Tiny client-side search + tag filtering ---
+    const q = document.getElementById('q');
+    const posts = Array.from(document.querySelectorAll('#posts article'));
+    const tagbar = document.getElementById('tagbar');
+    let activeTag = 'all';
+
+    function matches(post, query){
+      if(!query) return true;
+      const t = (post.dataset.title + ' ' + post.dataset.summary + ' ' + post.dataset.tags).toLowerCase();
+      return t.includes(query.toLowerCase());
+    }
+    function hasTag(post, tag){
+      if(tag === 'all') return true;
+      return (post.dataset.tags || '').split(',').map(s=>s.trim()).includes(tag);
+    }
+    function update(){
+      const query = q.value.trim();
+      posts.forEach(p=>{
+        p.style.display = (matches(p, query) && hasTag(p, activeTag)) ? '' : 'none';
+      });
+    }
+    q.addEventListener('input', update);
+    tagbar.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.tag');
+      if(!btn) return;
+      document.querySelectorAll('.tag').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      activeTag = btn.dataset.tag;
+      update();
+    });
+
+    // Initial hydrate from URL query (?q=search&tag=polymer-physics)
+    const params = new URLSearchParams(location.search);
+    if(params.get('q')){ q.value = params.get('q'); }
+    if(params.get('tag')){
+      const init = tagbar.querySelector(`.tag[data-tag="${params.get('tag')}"]`);
+      if(init){ init.click(); }
+    }
+    update();
+  </script>
+</body>
+</html>
