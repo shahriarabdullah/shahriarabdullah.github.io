@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Miah Abdullah Sahriar</title>
+  <meta name="description" content="Ph.D. student at UMN (CEMS). Polymer physics, microfluidics, optical tweezers. Publications, projects, notes." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%237A0019'/%3E%3Cpath d='M20 60 C40 10, 60 10, 80 60' stroke='%23FFCC33' stroke-width='6' fill='none'/%3E%3Ccircle cx='50' cy='50' r='6' fill='white'/%3E%3C/svg%3E">
+  <meta name="color-scheme" content="light dark" />
+  
+  <!-- Minimal, fast, responsive, inspired by inoryy.com but reoriented: sticky left rail + content stream -->
+  <style>
+    :root{
+      --bg: #fff;
+      --text: #111116;
+      --muted: #5b5e66;
+      --accent: #7A0019;  /* UMN Maroon */
+      --accent-2: #FFCC33;/* UMN Gold */
+      --border: #e6e7eb;
+      --card: #f8f9fb;
+      --shadow: 0 10px 30px rgba(0,0,0,.06);
+      --radius: 14px;
+      --maxw: 1100px;
+    }
+    :root.dark{
+      --bg: #0f1013;
+      --text: #f2f3f7;
+      --muted: #b4b8c0;
+      --border: #262a31;
+      --card: #151820;
+      --shadow: 0 8px 24px rgba(0,0,0,.35);
+    }
+
+    html,body{height:100%}
+    body{
+      margin:0; background:var(--bg); color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      line-height:1.6;
+    }
+    a{color:inherit; text-decoration: none}
+    a.uline{ text-decoration: underline; text-decoration-thickness:2px; text-underline-offset:4px }
+    .container{max-width: var(--maxw); margin-inline:auto; padding: 0 18px}
+
+    /* Layout: sticky left rail + content */
+    .wrap{ display:grid; grid-template-columns: 280px 1fr; gap: 28px; align-items:start; padding: 32px 0 40px }
+
+    /* Left Rail */
+    .rail{ position:sticky; top:18px; display:flex; flex-direction:column; gap:14px }
+    .name{ font-weight:800; font-size: clamp(1.4rem, 1.1rem + 1.2vw, 2rem); line-height:1.1 }
+    .tag{ color:var(--muted); font-size:.95rem }
+    .small{ font-size:.9rem; color:var(--muted) }
+    .nav{ display:flex; flex-wrap:wrap; gap:8px }
+    .chip{ padding:6px 10px; border:1px solid var(--border); border-radius:999px; background:var(--card) }
+    .chip:hover{ background: linear-gradient(90deg, var(--accent), var(--accent-2)); color:#fff; transform: translateY(-1px); box-shadow: var(--shadow) }
+
+    .actions{ display:flex; gap:8px; flex-wrap:wrap }
+    .btn{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border:1px solid var(--border); border-radius:12px; background:var(--card); box-shadow: var(--shadow) }
+    .btn:hover{ background: linear-gradient(90deg, var(--accent), var(--accent-2)); color:#fff }
+    .toggle{ border:1px solid var(--border); background:var(--card); border-radius:12px; padding:8px; display:inline-grid; place-items:center; cursor:pointer }
+    .toggle:hover{ background:color-mix(in srgb, var(--card) 70%, var(--accent-2)) }
+
+    /* Content stream */
+    main{ display:grid; gap:26px }
+    section{ background:var(--card); border:1px solid var(--border); border-radius: var(--radius); padding:18px 16px }
+    section h2{ margin:0 0 6px; font-size:1.05rem }
+    .muted{ color:var(--muted) }
+
+    .list{ display:grid; gap:10px }
+    .item{ display:flex; gap:12px; align-items:flex-start; border:1px solid var(--border); background:var(--bg); border-radius:12px; padding:12px 14px }
+    .item:hover{ border-color: color-mix(in srgb, var(--accent) 60%, var(--border)); box-shadow: var(--shadow) }
+    .dot{ width:10px; height:10px; border-radius:50%; margin-top:.5rem; background: radial-gradient(circle at 30% 30%, var(--accent-2), var(--accent)) }
+    .meta{ font-size:.9rem; color:var(--muted) }
+
+    /* Footer */
+    footer{ padding:20px 0 36px; color:var(--muted)}
+
+    /* Responsive */
+    @media (max-width: 900px){
+      .wrap{ grid-template-columns: 1fr; }
+      .rail{ position: static; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container wrap">
+    <!-- Sticky Rail -->
+    <aside class="rail" aria-label="Profile">
+      <div>
+        <div class="name">Miah Abdullah Sahriar</div>
+        <div class="tag">Ph.D. Student · Chemical Engineering & Materials Science · UMN</div>
+      </div>
+      <div class="nav" aria-label="Site navigation">
+        <a class="chip" href="#projects">Projects</a>
+        <a class="chip" href="#writing">Writing</a>
+        <a class="chip" href="#publications">Publications</a>
+        <a class="chip" href="#about">About</a>
+        <a class="chip" href="#contact">Contact</a>
+      </div>
+      <div class="actions">
+        <a class="btn" href="#cv" id="cvBtn" title="Download CV">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 15v3a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-3" stroke="currentColor" stroke-width="2"/></svg>
+          CV
+        </a>
+        <button class="toggle" id="themeToggle" title="Toggle dark mode" aria-label="Toggle theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="2"/></svg>
+        </button>
+      </div>
+      <p class="small">Polymer physics & soft matter using microfluidics and optical tweezers. 9 publications; building tools, methods, and clean datasets.</p>
+      <p class="small"><em>“Good science is humility with sharp tools. Models are maps, not territories; a single careful experiment can redraw the whole landscape.”</em></p>
+      <p class="small">
+        <a class="uline" href="mailto:abdul332@umn.edu">abdul332@umn.edu</a>  ·  
+        <a class="uline" href="#">Google Scholar</a>  ·  
+        <a class="uline" href="#">ORCID</a>  ·  
+        <a class="uline" href="#">GitHub</a>
+      </p>
+    </aside>
+
+    <!-- Content Stream -->
+    <main>
+      <!-- Intro / Now -->
+      <section id="now">
+        <h2>Now</h2>
+        <p class="muted">Designing a micro‑piston assay with trapped beads to quantify nucleoid softening under ionic and confinement gradients. 
+        Sharing CAD + analysis scripts as I go.</p>
+      </section>
+
+      <!-- Projects -->
+      <section id="projects">
+        <h2>Projects</h2>
+        <div class="list" role="list">
+          <article class="item" role="listitem">
+            <span class="dot" aria-hidden="true"></span>
+            <div>
+              <div><strong>Microfluidic Tweezer Platform</strong> — force–extension on bacterial nucleoids with on‑chip lysis</div>
+              <div class="meta">CAD + protocol · PDMS chips · Image analysis (Python)</div>
+            </div>
+          </article>
+          <article class="item" role="listitem">
+            <span class="dot" aria-hidden="true"></span>
+            <div>
+              <div><strong>Soft‑Polymer Models in Cells</strong> — mapping Rouse/Zimm regimes to nucleoid compaction</div>
+              <div class="meta">Theory + experiment · solvent quality · entanglement hints</div>
+            </div>
+          </article>
+          <article class="item" role="listitem">
+            <span class="dot" aria-hidden="true"></span>
+            <div>
+              <div><strong>Image Toolkit</strong> — segmentation, growth tracking, fluorescence quant</div>
+              <div class="meta">Open‑source scripts · reproducible figures</div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Writing / Notes -->
+      <section id="writing">
+        <h2>Writing</h2>
+        <div class="list" role="list">
+          <a class="item" href="#" role="listitem">
+            <span class="dot" aria-hidden="true"></span>
+            <div>
+              <div><strong>Confined DNA isn’t a spring—until you push it</strong></div>
+              <div class="meta">Aug 2025 · 5 min read</div>
+            </div>
+          </a>
+          <a class="item" href="#" role="listitem">
+            <span class="dot" aria-hidden="true"></span>
+            <div>
+              <div><strong>Optical tweezers as micro‑pistons</strong></div>
+              <div class="meta">Jul 2025 · notes</div>
+            </div>
+          </a>
+          <a class="item" href="#" role="listitem">
+            <span class="dot" aria-hidden="true"></span>
+            <div>
+              <div><strong>What counts as “temperature” in TTS?</strong></div>
+              <div class="meta">May 2025 · lab log</div>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- Publications (preview) -->
+      <section id="publications">
+        <h2>Publications (preview)</h2>
+        <div class="list" role="list">
+          <div class="item" role="listitem">
+            <span class="dot" aria-hidden="true"></span>
+            <div>
+              <div><strong>Title placeholder</strong> — Journal Name (2024)</div>
+              <div class="meta">Sahriar, M.A., et al. · <a class="uline" href="#">DOI</a></div>
+            </div>
+          </div>
+          <div class="item" role="listitem">
+            <span class="dot" aria-hidden="true"></span>
+            <div>
+              <div><strong>Title placeholder</strong> — Journal Name (2023)</div>
+              <div class="meta">Sahriar, M.A., et al. · <a class="uline" href="#">DOI</a></div>
+            </div>
+          </div>
+        </div>
+        <p class="muted" style="margin-top:10px">See all <a class="uline" href="#">publications →</a></p>
+      </section>
+
+      <!-- About -->
+      <section id="about">
+        <h2>About</h2>
+        <p class="muted">I’m a 2nd‑year Ph.D. student in Chemical Engineering & Materials Science at the University of Minnesota, working across microfluidics, optical trapping, and polymer physics to understand bacterial nucleoids as soft polymers.</p>
+      </section>
+
+      <!-- Contact -->
+      <section id="contact">
+        <h2>Contact</h2>
+        <p class="muted">For collaborations, tools, or questions: <a class="uline" href="mailto:abdul332@umn.edu">abdul332@umn.edu</a>.</p>
+      </section>
+
+      <footer class="muted">
+        © <span id="year"></span> Miah Abdullah Sahriar · Built with plain HTML/CSS · Inspired by inoryy.com (structure reoriented)
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Persisted theme toggle using :root.dark
+    const themeToggle = document.getElementById('themeToggle');
+    const saved = localStorage.getItem('theme');
+    if(saved === 'dark') document.documentElement.classList.add('dark');
+    themeToggle?.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // Year stamp
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // CV link placeholder (update to your PDF path)
+    document.getElementById('cvBtn')?.setAttribute('href', 'assets/Miah_Abdullah_Sahriar_CV.pdf');
+  </script>
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Miah Abdullah Sahriar",
+    "jobTitle": "Ph.D. Student",
+    "affiliation": {"@type": "CollegeOrUniversity", "name": "University of Minnesota"},
+    "email": "mailto:abdul332@umn.edu",
+    "url": "https://example.github.io/",
+    "sameAs": ["https://scholar.google.com/", "https://orcid.org/", "https://github.com/"]
+  }
+  </script>
+</body>
+</html>
