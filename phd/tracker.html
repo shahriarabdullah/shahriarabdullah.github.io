@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daily Experiment Time Logger</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --soft: #eff6ff;
+      --danger: #dc2626;
+      --success: #16a34a;
+      --shadow: 0 14px 35px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(circle at top left, #dbeafe 0, transparent 28%), var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 28px;
+    }
+
+    .app {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+
+    .title-block h1 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 4vw, 44px);
+      letter-spacing: -0.04em;
+    }
+
+    .title-block p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .date-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 18px 22px;
+      box-shadow: var(--shadow);
+      min-width: 240px;
+    }
+
+    .date-card .label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .date-card .date {
+      font-size: 20px;
+      font-weight: 750;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .control-card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
+    }
+
+    .control-card h3 {
+      margin: 0 0 12px;
+      font-size: 15px;
+    }
+
+    button, .file-label {
+      border: none;
+      border-radius: 14px;
+      padding: 11px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    button:hover, .file-label:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(37, 99, 235, 0.12);
+    }
+
+    .primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .secondary {
+      background: var(--soft);
+      color: var(--primary);
+    }
+
+    .danger {
+      background: #fee2e2;
+      color: var(--danger);
+    }
+
+    .success {
+      background: #dcfce7;
+      color: var(--success);
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 16px;
+    }
+
+    .panel-header h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+    }
+
+    .status {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 880px;
+      background: white;
+    }
+
+    th {
+      text-align: left;
+      background: #f9fafb;
+      color: #374151;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+      font-size: 14px;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    td[contenteditable="true"] {
+      background: #fffdf7;
+      outline: none;
+      border-radius: 8px;
+    }
+
+    td[contenteditable="true"]:focus {
+      box-shadow: inset 0 0 0 2px #facc15;
+    }
+
+    .step-name {
+      font-weight: 750;
+    }
+
+    .small-btn {
+      width: auto;
+      min-width: 96px;
+      padding: 9px 11px;
+      font-size: 13px;
+      border-radius: 12px;
+    }
+
+    .action-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .notes {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid transparent;
+    }
+
+    .footer-note {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .summary-card {
+      background: #f9fafb;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .summary-card .num {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .summary-card .caption {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 950px) {
+      header {
+        flex-direction: column;
+      }
+
+      .controls, .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 16px;
+      }
+
+      .controls, .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="title-block">
+        <h1>Daily Experiment Time Logger</h1>
+        <p>Click a button when each experimental step starts or ends. Edit any cell directly, then save the log as a clean HTML file named with today’s date.</p>
+      </div>
+      <div class="date-card">
+        <div class="label">Current log date</div>
+        <div class="date" id="displayDate"></div>
+      </div>
+    </header>
+
+    <section class="controls">
+      <div class="control-card">
+        <h3>Save today’s log</h3>
+        <button class="primary" onclick="downloadLog()">Save HTML Log</button>
+      </div>
+      <div class="control-card">
+        <h3>Load old log</h3>
+        <label class="file-label secondary" for="fileInput">Open HTML File</label>
+        <input id="fileInput" type="file" accept=".html,.htm" onchange="loadLogFile(event)" />
+      </div>
+      <div class="control-card">
+        <h3>Quick backup</h3>
+        <button class="success" onclick="saveToBrowser()">Save in Browser</button>
+      </div>
+      <div class="control-card">
+        <h3>Fresh table</h3>
+        <button class="danger" onclick="resetTable()">Clear All Fields</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Experiment Log</h2>
+        <div class="status" id="statusText">Ready</div>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="num" id="completedStarts">0</div>
+          <div class="caption">Start times logged</div>
+        </div>
+        <div class="summary-card">
+          <div class="num" id="completedEnds">0</div>
+          <div class="caption">End/event times logged</div>
+        </div>
+        <div class="summary-card">
+          <div class="num" id="completedDurations">0</div>
+          <div class="caption">Durations calculated</div>
+        </div>
+        <div class="summary-card">
+          <div class="num" id="lastSaved">—</div>
+          <div class="caption">Last browser save</div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table id="logTable">
+          <thead>
+            <tr>
+              <th>Experiment Step</th>
+              <th>Start Time</th>
+              <th>End / Event Time</th>
+              <th>Duration</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+
+      <p class="footer-note">
+        Tip: Yellow-tinted cells are editable. After loading an old HTML log, edit the fields directly and click “Save HTML Log” again to download an updated copy.
+      </p>
+    </section>
+  </div>
+
+  <script>
+    const steps = [
+      "Device bonding",
+      "Device passivation",
+      "Bead passivation",
+      "Bacteria on rocker",
+      "Lysozyme flow",
+      "Cell rupture",
+      "Hypotonic buffer flow",
+      "Imaging started",
+      "Imaging ended"
+    ];
+
+    const today = new Date();
+    const dateStamp = today.toISOString().slice(0, 10);
+    const readableDate = today.toLocaleDateString(undefined, {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    });
+
+    document.getElementById("displayDate").textContent = readableDate;
+
+    function nowTime() {
+      return new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
+    }
+
+    function buildTable(savedRows = null) {
+      const tableBody = document.getElementById("tableBody");
+      tableBody.innerHTML = "";
+
+      steps.forEach((step, index) => {
+        const saved = savedRows && savedRows[index] ? savedRows[index] : {};
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="step-name" contenteditable="true">${saved.step || step}</td>
+          <td contenteditable="true" class="start-time">${saved.start || ""}</td>
+          <td contenteditable="true" class="end-time">${saved.end || ""}</td>
+          <td class="duration">${saved.duration || ""}</td>
+          <td contenteditable="true" class="notes">${saved.notes || ""}</td>
+          <td>
+            <div class="action-row">
+              <button class="small-btn secondary" onclick="setTime(this, 'start')">Start</button>
+              <button class="small-btn primary" onclick="setTime(this, 'end')">End/Event</button>
+              <button class="small-btn danger" onclick="clearRow(this)">Clear</button>
+            </div>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+
+      addEditListeners();
+      updateAllDurations();
+      updateSummary();
+    }
+
+    function setTime(button, type) {
+      const row = button.closest("tr");
+      const target = type === "start" ? row.querySelector(".start-time") : row.querySelector(".end-time");
+      target.textContent = nowTime();
+      calculateDuration(row);
+      updateSummary();
+      setStatus("Time logged at " + nowTime());
+    }
+
+    function clearRow(button) {
+      const row = button.closest("tr");
+      row.querySelector(".start-time").textContent = "";
+      row.querySelector(".end-time").textContent = "";
+      row.querySelector(".duration").textContent = "";
+      row.querySelector(".notes").textContent = "";
+      updateSummary();
+      setStatus("Row cleared");
+    }
+
+    function parseTimeString(timeString) {
+      if (!timeString.trim()) return null;
+      const todayString = new Date().toDateString();
+      const parsed = new Date(todayString + " " + timeString.trim());
+      return isNaN(parsed.getTime()) ? null : parsed;
+    }
+
+    function calculateDuration(row) {
+      const start = parseTimeString(row.querySelector(".start-time").textContent);
+      const end = parseTimeString(row.querySelector(".end-time").textContent);
+      const durationCell = row.querySelector(".duration");
+
+      if (!start || !end) {
+        durationCell.textContent = "";
+        return;
+      }
+
+      let diffMs = end - start;
+      if (diffMs < 0) diffMs += 24 * 60 * 60 * 1000;
+
+      const totalSeconds = Math.round(diffMs / 1000);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      const parts = [];
+      if (hours) parts.push(hours + " h");
+      if (minutes) parts.push(minutes + " min");
+      if (seconds || parts.length === 0) parts.push(seconds + " s");
+      durationCell.textContent = parts.join(" ");
+    }
+
+    function updateAllDurations() {
+      document.querySelectorAll("#tableBody tr").forEach(calculateDuration);
+    }
+
+    function addEditListeners() {
+      document.querySelectorAll("td[contenteditable='true']").forEach(cell => {
+        cell.addEventListener("input", () => {
+          const row = cell.closest("tr");
+          calculateDuration(row);
+          updateSummary();
+        });
+      });
+    }
+
+    function getTableData() {
+      return Array.from(document.querySelectorAll("#tableBody tr")).map(row => ({
+        step: row.children[0].textContent.trim(),
+        start: row.querySelector(".start-time").textContent.trim(),
+        end: row.querySelector(".end-time").textContent.trim(),
+        duration: row.querySelector(".duration").textContent.trim(),
+        notes: row.querySelector(".notes").textContent.trim()
+      }));
+    }
+
+    function updateSummary() {
+      const data = getTableData();
+      document.getElementById("completedStarts").textContent = data.filter(row => row.start).length;
+      document.getElementById("completedEnds").textContent = data.filter(row => row.end).length;
+      document.getElementById("completedDurations").textContent = data.filter(row => row.duration).length;
+    }
+
+    function setStatus(message) {
+      document.getElementById("statusText").textContent = message;
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function makeSavedHtml() {
+      const data = getTableData();
+      const rows = data.map(row => `
+        <tr>
+          <td>${escapeHtml(row.step)}</td>
+          <td>${escapeHtml(row.start)}</td>
+          <td>${escapeHtml(row.end)}</td>
+          <td>${escapeHtml(row.duration)}</td>
+          <td>${escapeHtml(row.notes)}</td>
+        </tr>
+      `).join("");
+
+      const embeddedData = escapeHtml(JSON.stringify(data));
+
+      return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Experiment Log ${dateStamp}</title>
+  <style>
+    body { font-family: Inter, Segoe UI, Arial, sans-serif; margin: 32px; color: #1f2937; background: #f6f7fb; }
+    .sheet { max-width: 1100px; margin: auto; background: white; border-radius: 24px; padding: 28px; box-shadow: 0 14px 35px rgba(15, 23, 42, 0.08); }
+    h1 { margin: 0 0 6px; font-size: 32px; letter-spacing: -0.03em; }
+    p { color: #6b7280; margin-top: 0; }
+    table { width: 100%; border-collapse: collapse; margin-top: 22px; overflow: hidden; border-radius: 18px; }
+    th, td { padding: 13px 14px; border-bottom: 1px solid #e5e7eb; text-align: left; vertical-align: top; }
+    th { background: #eff6ff; font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; }
+    tr:last-child td { border-bottom: none; }
+    .meta { margin-top: 20px; font-size: 13px; color: #6b7280; }
+  </style>
+</head>
+<body>
+  <div class="sheet">
+    <h1>Experiment Log</h1>
+    <p>Date: ${readableDate}</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Experiment Step</th>
+          <th>Start Time</th>
+          <th>End / Event Time</th>
+          <th>Duration</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div class="meta">Generated by Daily Experiment Time Logger.</div>
+  </div>
+  <script id="experiment-log-data" type="application/json">${embeddedData}<\/script>
+</body>
+</html>`;
+    }
+
+    function downloadLog() {
+      updateAllDurations();
+      const html = makeSavedHtml();
+      const blob = new Blob([html], { type: "text/html" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `${dateStamp}_experiment_log.html`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+      setStatus("HTML log downloaded");
+    }
+
+    function saveToBrowser() {
+      const data = getTableData();
+      localStorage.setItem("dailyExperimentLog", JSON.stringify(data));
+      const time = nowTime();
+      localStorage.setItem("dailyExperimentLogLastSaved", time);
+      document.getElementById("lastSaved").textContent = time;
+      setStatus("Saved in this browser");
+    }
+
+    function loadFromBrowser() {
+      const saved = localStorage.getItem("dailyExperimentLog");
+      const savedAt = localStorage.getItem("dailyExperimentLogLastSaved");
+      if (saved) {
+        try {
+          buildTable(JSON.parse(saved));
+          if (savedAt) document.getElementById("lastSaved").textContent = savedAt;
+          setStatus("Loaded browser backup");
+        } catch (error) {
+          buildTable();
+        }
+      } else {
+        buildTable();
+      }
+    }
+
+    function loadLogFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const htmlText = e.target.result;
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, "text/html");
+        const dataScript = doc.querySelector("#experiment-log-data");
+
+        if (dataScript) {
+          try {
+            const data = JSON.parse(dataScript.textContent);
+            buildTable(data);
+            setStatus("Loaded: " + file.name);
+            return;
+          } catch (error) {
+            console.warn("Embedded data could not be parsed.", error);
+          }
+        }
+
+        const rows = Array.from(doc.querySelectorAll("tbody tr")).map(row => {
+          const cells = row.querySelectorAll("td");
+          return {
+            step: cells[0]?.textContent.trim() || "",
+            start: cells[1]?.textContent.trim() || "",
+            end: cells[2]?.textContent.trim() || "",
+            duration: cells[3]?.textContent.trim() || "",
+            notes: cells[4]?.textContent.trim() || ""
+          };
+        });
+
+        if (rows.length) {
+          buildTable(rows);
+          setStatus("Loaded table from: " + file.name);
+        } else {
+          alert("No readable experiment log table found in this file.");
+          setStatus("File could not be loaded");
+        }
+      };
+
+      reader.readAsText(file);
+      event.target.value = "";
+    }
+
+    function resetTable() {
+      if (!confirm("Clear all logged times and notes from the current table?")) return;
+      buildTable();
+      setStatus("Fresh table created");
+    }
+
+    loadFromBrowser();
+  </script>
+</body>
+</html>
