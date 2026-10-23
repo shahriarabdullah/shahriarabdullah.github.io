@@ -1,0 +1,44 @@
+{
+  "entries": [
+    {
+      "title": "Mechanics of bacterial chromosomes",
+      "venue": "Ongoing research",
+      "year": 2026,
+      "abstract": "Investigating how growth conditions influence the mechanical response of the E. coli nucleoid using microfluidic confinement, optical tweezers, and microscopy.",
+      "tags": [
+        "DNA dynamics",
+        "Soft matter",
+        "Microfluidics"
+      ],
+      "links": [],
+      "draft": false,
+      "order": 1
+    },
+    {
+      "title": "Chromosome organization under confinement",
+      "venue": "Ongoing research",
+      "year": 2026,
+      "abstract": "Exploring how cellular geometry, physical confinement, and environmental changes influence the spatial organization of bacterial DNA.",
+      "tags": [
+        "Polymer physics",
+        "Confinement"
+      ],
+      "links": [],
+      "draft": false,
+      "order": 2
+    },
+    {
+      "title": "Quantitative imaging for biological soft materials",
+      "venue": "Research direction",
+      "year": 2026,
+      "abstract": "Developing image-analysis approaches to describe structural change and heterogeneity in biological polymers.",
+      "tags": [
+        "Microscopy",
+        "Image analysis"
+      ],
+      "links": [],
+      "draft": false,
+      "order": 3
+    }
+  ]
+}

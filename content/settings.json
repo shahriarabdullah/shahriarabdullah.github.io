@@ -1,0 +1,22 @@
+{
+  "name": "Miah Abdullah Sahriar",
+  "tagline": "PhD candidate researching DNA dynamics",
+  "bio": "Infinitely curious",
+  "email": "shahriarabdullah0@gmail.com",
+  "accentColor": "#355c4a",
+  "footerText": "Made slowly, with curiosity.",
+  "socialLinks": [
+    {
+      "label": "Email",
+      "url": "mailto:shahriarabdullah0@gmail.com"
+    },
+    {
+      "label": "Google Scholar",
+      "url": "https://scholar.google.com/citations?user=es0mtg4AAAAJ&hl=en&oi=ao"
+    },
+    {
+      "label": "GitHub",
+      "url": "https://github.com/shahriarabdullah"
+    }
+  ]
+}

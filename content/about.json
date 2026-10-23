@@ -1,0 +1,39 @@
+{
+  "heading": "A little about me",
+  "intro": "I am a researcher interested in the physical ideas hidden inside living systems.",
+  "story": "My work sits at the intersection of DNA dynamics, polymer physics, soft matter, microscopy, and quantitative experimentation. I am especially drawn to questions where something enormously complex can be approached through a surprisingly simple physical idea. Outside the laboratory, I photograph nature and ordinary moments, read widely, and follow questions simply because they are interesting.",
+  "values": [
+    {
+      "title": "Curiosity before certainty",
+      "description": "I would rather begin with a good question than rush toward a neat answer."
+    },
+    {
+      "title": "Measure carefully",
+      "description": "Good measurements should clarify a phenomenon rather than hide its uncertainty."
+    },
+    {
+      "title": "Look beyond disciplines",
+      "description": "Ideas become especially interesting when biology, physics, materials science, and computation begin to overlap."
+    }
+  ],
+  "timeline": [
+    {
+      "period": "2024 — present",
+      "title": "PhD candidate",
+      "organization": "University of Minnesota Twin Cities",
+      "description": "Studying DNA dynamics, bacterial chromosome mechanics, polymer physics, and soft matter."
+    },
+    {
+      "period": "2026",
+      "title": "MS in Chemical Engineering",
+      "organization": "University of Minnesota Twin Cities",
+      "description": "Completed en route to the PhD."
+    },
+    {
+      "period": "Earlier work",
+      "title": "Materials and computational research",
+      "organization": "Research across low-dimensional and energy materials",
+      "description": "Worked on microscopy-based materials characterization and data-driven materials research."
+    }
+  ]
+}

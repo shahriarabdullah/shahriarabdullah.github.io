@@ -1,0 +1,28 @@
+{
+  "entries": [
+    {
+      "slug": "curiosity-as-a-method",
+      "title": "Curiosity as a method",
+      "description": "On asking questions before trying to answer them.",
+      "date": "2026-10-12",
+      "tags": [
+        "Reflections",
+        "Research"
+      ],
+      "draft": false,
+      "body": "There is a particular satisfaction in noticing something small that does not fit neatly into what we expected.\n\nResearch often begins there: not with a confident explanation, but with a question that survives our first attempts to dismiss it.\n\nI like the idea that curiosity is not simply a personality trait. It can also be a discipline: a way of looking carefully, questioning assumptions, and being willing to change one's mind.\n\nPerhaps the best questions do not disappear once answered. They teach us how to see the next question."
+    },
+    {
+      "slug": "what-does-it-mean-to-measure-life",
+      "title": "What does it mean to measure life?",
+      "description": "A brief thought about measurements and living matter.",
+      "date": "2026-09-20",
+      "tags": [
+        "Science",
+        "Soft matter"
+      ],
+      "draft": false,
+      "body": "When we measure a living system, we often begin by translating it into numbers: length, force, shape, time.\n\nThose numbers are useful, but they are not the whole story. A measurement depends on the question we ask, the instrument we build, and what we decide to treat as signal or noise.\n\nThe challenge is to use simple physical descriptions without forgetting the complexity that made the question interesting in the first place."
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+backend:
+  name: github
+  repo: shahriarabdullah/shahriarabdullah.github.io
+  branch: main
+  auth_methods: [token]
+media_folder: uploads
+public_folder: /uploads
+site_url: https://shahriarabdullah.github.io
+locale: en
+collections:
+  - name: editable
+    label: "Pages & settings"
+    files:
+      - name: home
+        label: Homepage
+        file: content/home.json
+        format: json
+        fields:
+          - { label: Eyebrow, name: eyebrow, widget: string }
+          - { label: Headline, name: heading, widget: string }
+          - { label: Intro, name: intro, widget: text }
+          - { label: Secondary text, name: secondaryText, widget: text }
+      - name: about
+        label: About me
+        file: content/about.json
+        format: json
+        fields:
+          - { label: Heading, name: heading, widget: string }
+          - { label: Intro, name: intro, widget: text }
+          - { label: Story, name: story, widget: text }
+          - label: Values
+            name: values
+            widget: list
+            fields:
+              - {label: Title, name: title, widget: string}
+              - {label: Description, name: description, widget: text}
+          - label: Timeline
+            name: timeline
+            widget: list
+            fields:
+              - {label: Period, name: period, widget: string}
+              - {label: Title, name: title, widget: string}
+              - {label: Organization, name: organization, widget: string}
+              - {label: Description, name: description, widget: text, required: false}
+      - name: settings
+        label: Site settings
+        file: content/settings.json
+        format: json
+        fields:
+          - { label: Name, name: name, widget: string }
+          - { label: Tagline, name: tagline, widget: string }
+          - { label: Bio, name: bio, widget: text }
+          - { label: Contact email, name: email, widget: string }
+          - { label: Accent color, name: accentColor, widget: color, required: false }
+          - { label: Footer text, name: footerText, widget: string }
+          - label: Social links
+            name: socialLinks
+            widget: list
+            fields:
+              - {label: Label, name: label, widget: string}
+              - {label: URL, name: url, widget: string}
+  - name: writings
+    label: "Thoughts"
+    files:
+      - name: thoughts
+        label: All thoughts
+        file: content/thoughts.json
+        format: json
+        fields:
+          - label: Essays
+            name: entries
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - {label: Title, name: title, widget: string}
+              - {label: URL slug (unique), name: slug, widget: string, hint: "lowercase-words-with-hyphens"}
+              - {label: Description, name: description, widget: text}
+              - {label: Date, name: date, widget: date, format: YYYY-MM-DD}
+              - {label: Tags, name: tags, widget: list, field: {label: Tag, name: tag, widget: string}, required: false}
+              - {label: Draft (hide from site), name: draft, widget: boolean, default: true}
+              - {label: Essay text (Markdown), name: body, widget: markdown}
+  - name: projects
+    label: "Research"
+    files:
+      - name: research
+        label: Projects & publications
+        file: content/research.json
+        format: json
+        fields:
+          - label: Research entries
+            name: entries
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - {label: Title, name: title, widget: string}
+              - {label: Venue, name: venue, widget: string, required: false}
+              - {label: Year, name: year, widget: number, value_type: int}
+              - {label: Abstract, name: abstract, widget: text}
+              - {label: Tags, name: tags, widget: list, field: {label: Tag, name: tag, widget: string}, required: false}
+              - {label: Draft (hide from site), name: draft, widget: boolean, default: true}
+              - {label: Sort order, name: order, widget: number, default: 0, value_type: int}
+              - label: Links
+                name: links
+                widget: list
+                required: false
+                fields:
+                  - {label: Label, name: label, widget: string}
+                  - {label: URL, name: url, widget: string}
+  - name: photos
+    label: "Photography"
+    files:
+      - name: photography
+        label: Albums
+        file: content/photography.json
+        format: json
+        fields:
+          - label: Albums
+            name: entries
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - {label: Album title, name: title, widget: string}
+              - {label: Date, name: date, widget: date, format: YYYY-MM-DD}
+              - {label: Location, name: location, widget: string, required: false}
+              - {label: Draft (hide from site), name: draft, widget: boolean, default: false}
+              - label: Images
+                name: images
+                widget: list
+                fields:
+                  - {label: Image, name: src, widget: image}
+                  - {label: Alt text, name: alt, widget: string}
+                  - {label: Caption, name: caption, widget: string, required: false}
+  - name: reflections
+    label: Quotes
+    files:
+      - name: quotes
+        label: All quotes
+        file: content/quotes.json
+        format: json
+        fields:
+          - label: Quotes
+            name: entries
+            widget: list
+            summary: "{{fields.source}} — {{fields.page}}"
+            fields:
+              - {label: Quote in English, name: text, widget: text}
+              - {label: Arabic (optional), name: arabic, widget: text, required: false}
+              - {label: Primary source, name: source, widget: string}
+              - {label: Theme, name: theme, widget: string}
+              - label: Assign to page
+                name: page
+                widget: select
+                options: [home, about, research, thoughts, photography]
